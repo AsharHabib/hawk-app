@@ -1,0 +1,26 @@
+INDEX VERSION 1.131+C:\Users\Tal\Desktop\coding_work\Project2\.metadata\.plugins\org.eclipse.jdt.core
+3432412798.index
+1290062430.index
+2198879271.index
+605875280.index
+20977447.index
+3527805171.index
+2244181902.index
+4239104131.index
+146539210.index
+2386357862.index
+2317446775.index
+1698981074.index
+1239292895.index
+3012245809.index
+234531895.index
+2313906453.index
+1623646658.index
+1352033707.index
+3023440040.index
+3222470536.index
+3527780732.index
+2605918856.index
+534434305.index
+2591261460.index
+1996443332.index

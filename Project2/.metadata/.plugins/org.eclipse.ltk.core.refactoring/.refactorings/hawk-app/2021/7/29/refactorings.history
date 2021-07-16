@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;hawk-app/src/main/resources/seatmap&apos; to &apos;seatmap.html&apos;" description="Rename resource &apos;seatmap&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/resources/seatmap" name="seatmap.html" stamp="1626404953774" updateReferences="true"/>
+</session>
