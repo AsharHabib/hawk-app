@@ -8,6 +8,7 @@ import static io.javalin.apibuilder.ApiBuilder.post;
 import controllers.TestController;
 
 //import controllers.UserController;
+import controllers.UserController;
 import io.javalin.Javalin;
 
 public class Dispatcher {
@@ -20,7 +21,23 @@ public class Dispatcher {
 			});
 		});
 		
-		
+		app.routes(()->{
+			path("/api/users",() ->{
+				get(UserController::getAllUsers);
+			});
+		});
+
+		app.routes(()->{
+			path("/api/check-user", ()->{
+				post(UserController::checkUser);
+			});
+		});
+
+		app.routes(()->{
+			path("/api/register", ()->{
+				post(UserController::createUser);
+			});
+		});
 	}
 
 }

@@ -7,7 +7,8 @@ public class User {
 	private String email;
 	private String password;
 	
-	
+	public User(){ } // Added default constructor
+
 	public User(int id, String firstName, String lastName, String email, String password) {
 		super();
 		this.setId(id);
