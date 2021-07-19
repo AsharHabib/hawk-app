@@ -93,13 +93,11 @@ public class UserDaoImpl implements UserDao{
 		return users;
 	}
 
-	@Override
-	public Map<Integer, User> checkUser(){
-		// For the login
-		HashMap<Integer, User> user = new HashMap<>(); // To store the retrieved elements in the column
-
-		User getUser = new User(); // default constructor
-
+	public Map<Integer, User> checkUser(User user){
+		System.out.println("Goes through the DAO IMPL");
+		// Create a Map that stores the retrieved user
+		HashMap<Integer, User> oneUser = new HashMap<>();
+		// Initialize the connection, statement, and the result set
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet set = null;
@@ -110,16 +108,16 @@ public class UserDaoImpl implements UserDao{
 
 			stmt = conn.prepareStatement(SQL); // Prepare statement
 
-			stmt.setString(1, getUser.getEmail());
-			stmt.setString(2, getUser.getPassword());
+			stmt.setString(1, user.getEmail());
+			stmt.setString(2, user.getPassword());
 
-			set = stmt.executeQuery(SQL); // Execute sql
+			set = stmt.executeQuery(); // Execute sql
 
 			while(set.next()) {
 				User retrievedUser = new User(set.getInt(1), set.getString(2), set.getString(3),
 						set.getString(4), set.getString(5));
 				// put(key, value) - the key is the user_id and the value is the whole row
-				user.put(set.getInt(1), retrievedUser);
+				oneUser.put(set.getInt(1), retrievedUser);
 			}
 
 		} catch (SQLException e) {
@@ -132,7 +130,7 @@ public class UserDaoImpl implements UserDao{
 			ResourceClosers.closeResultSet(set);
 		}
 
-		return user;
+		return oneUser;
 	}
 
 	public void createUser(User user){
@@ -165,5 +163,74 @@ public class UserDaoImpl implements UserDao{
 
 	}
 
-	
+	public void registerUser(String firstName, String lastName, String email, String password){
+		Connection conn = null;
+		PreparedStatement stmt = null;
+
+		try {
+			//Establish the connection to the DB
+			conn = ConnectionUtil.getConnection();
+			final String SQL = "insert into users values(default, ?, ?, ?, ?)";
+
+			stmt = conn.prepareStatement(SQL);
+
+			//Since the SQL statement is parameterized, I need to set the values of
+			//the parameters.
+			stmt.setString(1, firstName);
+			stmt.setString(2, lastName);
+			stmt.setString(3, email);
+			stmt.setString(4, password);
+
+			//And of course, execute the SQL statement once you have set your parameters.
+			stmt.execute();
+
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ResourceClosers.closeConnection(conn);
+			ResourceClosers.closeStatement(stmt);
+		}
+
+	}
+
+	@Override
+	public Map<Integer, User> userLogin(String email, String password) {
+		HashMap<Integer, User> oneUser = new HashMap<>();
+		// Initialize the connection, statement, and the result set
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet set = null;
+
+		try {
+			conn = ConnectionUtil.getConnection();
+			final String SQL = "select * from users where user_email = ? and user_password = ?";
+
+			stmt = conn.prepareStatement(SQL); // Prepare statement
+
+			stmt.setString(1, email);
+			stmt.setString(2, password);
+
+			set = stmt.executeQuery(); // Execute sql
+
+			while(set.next()) {
+				User retrievedUser = new User(set.getInt(1), set.getString(2), set.getString(3),
+						set.getString(4), set.getString(5));
+				// put(key, value) - the key is the user_id and the value is the whole row
+				oneUser.put(set.getInt(1), retrievedUser);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			//Remember to close your connection and release all of your JDBC resources.
+			ResourceClosers.closeConnection(conn);
+			ResourceClosers.closeStatement(stmt);
+			ResourceClosers.closeResultSet(set);
+		}
+
+		return oneUser;
+	}
+
+
 }
