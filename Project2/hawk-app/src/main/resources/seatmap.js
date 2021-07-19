@@ -1,9 +1,3 @@
-function setAttributes(em, attrs){
-    for(var key in attrs){
-        em.setAttribute(key, attrs[key])
-    }
-}
-
 async function get_seatmap(){
 
     const url = 'endpoint'
