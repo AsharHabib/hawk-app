@@ -39,14 +39,14 @@
                 </div>
                 <!-- Radios (One-Way and Round-Trip) -->
                 <div id="radios">
-                    <div class="form-check form-check-inline">
+                    <div class="form-check form-check-inline firstRadios">
                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
                             value="option1">
                         <label class="form-check-label tripLabel" for="inlineRadio1">One-Way</label>
                     </div>
-                    <div class="form-check form-check-inline">
+                    <div class="form-check form-check-inline firstRadios">
                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                            value="option2">
+                            value="option2" checked>
                         <label class="form-check-label tripLabel" for="inlineRadio2">Round-Trip</label>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                     <div class="col-md">
                         <h5 class="fromAndToHeader">Flying From</h5>
                       <div class="form-floating">
-                        <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value="Hawk Airport">
+                        <input class="form-control" id="floatingInputGrid" placeholder="name@example.com" value="Hawk Airport">
                         <label for="floatingInputGrid">Flying From</label>
                       </div>
                     </div>
@@ -71,7 +71,90 @@
                         <label for="floatingSelectGrid">Flying To</label>
                       </div>
                     </div>
-                  </div>
+                </div>
+                <!-- Flight Dates -->
+                <div class="row g-2 fromAndTo">
+                    <div class="col-md">
+                        <h5 class="fromAndToHeader">Departure Date</h5>
+                      <div class="form-floating">
+                        <input type="date" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value="Hawk Airport">
+                        <label for="floatingInputGrid">Departure Date</label>
+                      </div>
+                    </div>
+                    <div id="returnDate" class="col-md">
+                        <h5 class="fromAndToHeader">Return Date</h5>
+                      <div class="form-floating">
+                        <input type="date" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value="Hawk Airport">
+                        <label for="floatingSelectGrid">Return Date</label>
+                      </div>
+                    </div>
+                </div>
+                <!-- Adults and Connections-->
+                <div id="adsAndConn" class="row g-2">
+                    <!-- Adults -->
+                    <div class="col-md">
+                        <h5 class="numOfPass">Number of Passengers</h5>
+                      <div class="form-floating">
+                        <input type="number" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value="1">
+                        <label for="floatingInputGrid">Adults</label>
+                      </div>
+                    </div>
+                    <!-- Connections -->
+                    <div class="col-md">
+                        <h5 id="connHeader">Flight Connection</h5>
+                        <div class="form-check form-check-inline thirdRadios">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1">
+                            <label class="form-check-label connLabel" for="exampleRadios1">
+                              Non-Stop
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline thirdRadios">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" checked>
+                            <label class="form-check-label connLabel" for="exampleRadios2">
+                              Connected
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Class -->
+                <div id="classRadios" class="row g-2">
+                    <div class="col-md">
+                        <h5 id="classHeader">Class</h5>
+                        <div class="form-check form-check-inline secondRadios">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+                            <label class="form-check-label classLabel" for="flexRadioDefault1">
+                              Economy
+                            </label>
+                          </div>
+                          <div class="form-check form-check-inline secondRadios">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                            <label class="form-check-label classLabel" for="flexRadioDefault2">
+                              Premium-Economy
+                            </label>
+                          </div>
+                          <div class="form-check form-check-inline secondRadios">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
+                            <label class="form-check-label classLabel" for="flexRadioDefault3">
+                              Business-Class
+                            </label>
+                          </div>
+                          <div class="form-check form-check-inline secondRadios">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4">
+                            <label class="form-check-label classLabel" for="flexRadioDefault4">
+                              First-Class
+                            </label>
+                          </div>
+                    </div>
+                    <div class="col-md">
+                        <h5 class="numOfPass">Max Price</h5>
+                      <div class="form-floating">
+                        <input type="money" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value="0.00">
+                        <label for="floatingInputGrid">Price</label>
+                      </div>
+                    </div>
+                </div>
+                    <!-- Button -->
+                    <button id="nextBtn" type="button" class="btn btn-primary btn-lg">Next</button>
             </div>
             <!-- Airplane Image -->
             <div class="col-7">
@@ -82,6 +165,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+    <script src="./scripts/searchFlight.js"></script>
 </body>
 
 </html>
