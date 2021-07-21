@@ -31,18 +31,18 @@ public class UserController {
                 context.formParam("password"));
         context.sessionAttribute("currentUser", user);
         context.json(user);
-        context.redirect("/index.html");
+        context.render("/index.html");
     }
     public static void registerUser(Context context){
         userService.registerUser(context.formParam("firstName"),
                 context.formParam("lastName"),
                 context.formParam("email"),
                 context.formParam("password"));
-        context.redirect("/index.html");
+        context.render("/index.html");
     }
 
     public static void defaultPage(Context context){
-        context.redirect("/login.html");
+        context.render("/login.html");
     }
 
     public static void logOut(Context context){
