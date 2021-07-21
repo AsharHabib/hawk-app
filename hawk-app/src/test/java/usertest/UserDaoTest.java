@@ -55,11 +55,13 @@ public class UserDaoTest {
         Map<Integer, User> users = new HashMap<>();
         Map<Integer, User> expectedUsers = new HashMap<>();
         Map<Integer, User> actualUsers = new HashMap<>();
+
 //        Connection conn;
 //        Statement stmt;
 //        ResultSet set;
 
         try{
+            // This is the local data base url, username and password for testing
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/","postgres","kent123q");
             final String SQL = "select * from users";
             statement = connection.createStatement();
