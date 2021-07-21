@@ -47,8 +47,45 @@
 					body: JSON.stringify(flight_seatmap_display)
 				});
 				var json = await response.json();
-				console.log(json);
 				display(json);
+				document.getElementById("Flight-0").style.display = "block";
+				var available_seats = document.querySelectorAll(".flight-map .available");
+				for (let available_seat_index = 0; available_seat_index < available_seats.length; available_seat_index++) {
+					available_seats[available_seat_index].checked = false;
+					available_seats[available_seat_index].addEventListener("click", () => {
+						var div_tab_id = available_seats[available_seat_index].parentElement.parentElement.id;
+						var passengers_remaining_h2 = document.querySelector(`#${div_tab_id} > h2`);
+						var available_seats_h2 = document.querySelector(`#${div_tab_id} > h2 + h2`);		
+						var passengers_remaining = parseInt(passengers_remaining_h2.innerText.substring(42));
+						var num_available_seats = parseInt(available_seats_h2.innerText.substring(27));
+						const inputFields = document.querySelectorAll("input");
+						var all_seats_chosen = false;
+						
+						available_seats[available_seat_index].checked = !available_seats[available_seat_index].checked;
+						if (available_seats[available_seat_index].checked) {
+							available_seats[available_seat_index].style.backgroundColor = "orange";
+							document.getElementById(`${div_tab_id}_${original_passengers-passengers_remaining}`).setAttribute("value", `${available_seats[available_seat_index].id}`);
+							num_available_seats--;
+							passengers_remaining--;
+							passengers_remaining_h2.innerText = `Number of passengers to choose seats for: ${passengers_remaining}`;
+							available_seats_h2.innerText = `Available seats remaining: ${num_available_seats}`;
+						} else {
+							available_seats[available_seat_index].style.backgroundColor = "green";
+							num_available_seats++;
+							passengers_remaining++;
+							document.getElementById(`${div_tab_id}_${original_passengers-passengers_remaining}`).removeAttribute("value");
+							passengers_remaining_h2.innerText = `Number of passengers to choose seats for: ${passengers_remaining}`;
+							available_seats_h2.innerText = `Available seats remaining: ${num_available_seats}`;
+						}
+						const validInputs = Array.from(inputFields).filter( input => input.value !== "");
+						var button = document.getElementsByTagName("button")[0];
+						if (inputFields.length === validInputs.length) {
+							button.style.display = "block";
+						} else {
+							button.style.display = "none";
+						}
+					});
+				}
 			}
 			
 			async function RequestAccessToken() {
@@ -163,44 +200,6 @@
 			
 			window.onload = function() {
 				SeatmapDisplay();
-				var available_seats = document.querySelectorAll(".flight-map .available");
-				for (let available_seat_index = 0; available_seat_index < available_seats.length; available_seat_index++) {
-					available_seats[available_seat_index].checked = false;
-					available_seats[available_seat_index].addEventListener("click", () => {
-						var div_tab_id = available_seats[available_seat_index].parentElement.parentElement.id;
-						var passengers_remaining_h2 = document.querySelector(`#${div_tab_id} > h2`);
-						var available_seats_h2 = document.querySelector(`#${div_tab_id} > h2 + h2`);		
-						var passengers_remaining = parseInt(passengers_remaining_h2.innerText.substring(42));
-						var num_available_seats = parseInt(available_seats_h2.innerText.substring(27));
-						const inputFields = document.querySelectorAll("input");
-						var all_seats_chosen = false;
-						
-						available_seats[available_seat_index].checked = !available_seats[available_seat_index].checked;
-						if (available_seats[available_seat_index].checked) {
-							available_seats[available_seat_index].style.backgroundColor = "orange";
-							document.getElementById(`${div_tab_id}_${original_passengers-passengers_remaining}`).setAttribute("value", `${available_seats[available_seat_index].id}`);
-							num_available_seats--;
-							passengers_remaining--;
-							passengers_remaining_h2.innerText = `Number of passengers to choose seats for: ${passengers_remaining}`;
-							available_seats_h2.innerText = `Available seats remaining: ${num_available_seats}`;
-						} else {
-							available_seats[available_seat_index].style.backgroundColor = "green";
-							num_available_seats++;
-							passengers_remaining++;
-							document.getElementById(`${div_tab_id}_${original_passengers-passengers_remaining}`).removeAttribute("value");
-							passengers_remaining_h2.innerText = `Number of passengers to choose seats for: ${passengers_remaining}`;
-							available_seats_h2.innerText = `Available seats remaining: ${num_available_seats}`;
-						}
-						const validInputs = Array.from(inputFields).filter( input => input.value !== "");
-						var button = document.getElementsByTagName("button")[0];
-						if (inputFields.length === validInputs.length) {
-							button.style.display = "block";
-						} else {
-							button.style.display = "none";
-						}
-					});
-					
-				}
 			}
 		</script>
 	</body>
