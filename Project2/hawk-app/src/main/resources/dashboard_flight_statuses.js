@@ -1,12 +1,3 @@
-async function get_current_bookings(){
-
-    const url = 'endpoint'
-    const response = await fetch(url)
-    const my_json = await response.json()
-    let booking = document.querySelector('#current_bookings > tbody')
-    const
-}
-
 async function get_flight_statuses(){
 
     const url = 'endpoint'
@@ -30,12 +21,21 @@ async function get_flight_statuses(){
         tr.appendChild(th.append(flightno))
         //no destination or origin listed in example json
     }
+    rowfade()
 }
 
-async function get_previous_bookings(){
+async function rowfade(){
+    let rows = document.querySelectorAll('tbody > tr')
+    rows.item(0).setAttribute('id', 'done')
+    rows.forEach((row) => {
+        row.addEventListener('animationend', ()=>{
+            console.log("animation ended")
+            row.nextElementSibling.setAttribute('id', 'done')
+        })
+    })
+}
 
-    const url = 'endpoint'
-    const response = await fetch(url)
-    const my_json = await response.json()
-    let booking = document.querySelector('#previous_bookings > tbody')
+
+window.onload = () => {
+    this.get_flight_statuses()
 }
