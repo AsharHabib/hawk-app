@@ -25,13 +25,13 @@
 	
 	<dependencies>
 	<!-- Javalin -->
-		<dependency>
-		    <groupId>io.javalin</groupId>
-		    <artifactId>javalin</artifactId>
-		    <version>3.13.9</version>
-		</dependency>
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+            <version>3.13.10</version>
+        </dependency>
 		
-		<dependency>
+		<!-- <dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>
 		    <version>1.8.0-beta4</version>
@@ -41,6 +41,11 @@
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-simple</artifactId>
 		    <version>1.8.0-beta4</version>
+		</dependency> -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.30</version>
 		</dependency>
 		
 		<!-- Jackson -->
@@ -63,10 +68,30 @@
 		    <artifactId>dotenv-java</artifactId>
 		    <version>2.2.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.4.0</version>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
 		    <version>42.2.19</version>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf</artifactId>
+			<version>3.0.11.RELEASE</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>3.11.2</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
