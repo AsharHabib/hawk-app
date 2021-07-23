@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #044ea0;">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Home</a>
+    <a class="navbar-brand" href="http://localhost:5000/api/">Home</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -35,7 +35,7 @@
         <!-- password -->
         <div class="mb-3">
           <label for="inputPassword" class="form-label">Create password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+          <input type="password" class="form-control" name="password1">
           <ul class="card-text">
             <li class="qualify">Minimum 5 characters</li>
           </ul>
@@ -43,13 +43,13 @@
         <!-- same password -->
         <div class="mb-3">
           <label for="inputPasswordRetype" class="form-label">Retype password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+          <input type="password" class="form-control" name="password2">
           <ul class="card-text retype">
           </ul>
         </div>
       </form>
     </div>
-    <button type="submit" class="card-footer btn btn-primary bg-gradient">Submit</button>
+    <button type="submit" class="card-footer btn btn-primary bg-gradient" onclick="http://localhost:5000/api/register">Submit</button>
   </div>
 </div>
 <footer>
