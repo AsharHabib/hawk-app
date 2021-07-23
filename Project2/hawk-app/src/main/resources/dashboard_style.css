@@ -52,7 +52,6 @@ tbody > #done{
     display: block;
     margin: auto;
     background-color: #044ea0;
-    /* margin-top: 1em; */
     width: 50%;
     height: 3em;
     position: absolute;
