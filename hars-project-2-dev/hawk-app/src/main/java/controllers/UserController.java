@@ -32,16 +32,6 @@ public class UserController {
         context.json(userService.getAllUsers());
     }
 
-    public static void createUser(Context context) {
-        User user = context.bodyAsClass(User.class);
-        userService.createUser(user);
-        context.result("A new user has been created!");
-    }
-
-    public static void checkUser(Context context){
-        User user = context.bodyAsClass(User.class);
-        context.json(userService.checkUser(user));
-    }
     public static void userLogIn(Context context){
         try {
 			User user = userService.userLogIn(context.formParam("email"), context.formParam("password"));

@@ -12,26 +12,10 @@ public class UserServiceImpl implements UserService {
 	public UserServiceImpl() {
 		this.userDao = new UserDaoImpl();
 	}
-	
-	@Override
-	public String getOne() {
-		// TODO Auto-generated method stub
-		this.userDao.getOne();
-		return "Working";
-	}
 
 	@Override
 	public Map<Integer, User> getAllUsers() {
 		return this.userDao.getAllUsers();
-	}
-
-	@Override
-	public void createUser(User user) {
-		this.userDao.createUser(user);
-	}
-
-	public Map<Integer, User> checkUser(User user) {
-		return this.userDao.checkUser(user);
 	}
 
 	@Override

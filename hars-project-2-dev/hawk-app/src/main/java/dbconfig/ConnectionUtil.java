@@ -13,7 +13,5 @@ public class ConnectionUtil {
 				System.getenv("db_url2"), 
 				System.getenv("db_username"),
 				System.getenv("db_password"));
-
-
 	}
 }

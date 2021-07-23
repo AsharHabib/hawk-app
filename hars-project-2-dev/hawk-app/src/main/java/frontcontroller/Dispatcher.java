@@ -5,12 +5,9 @@ import static io.javalin.apibuilder.ApiBuilder.get;
 import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.post;
 
-import controllers.TestController;
-
 //import controllers.UserController;
 import controllers.UserController;
 import io.javalin.Javalin;
-import io.javalin.core.security.Role;
 
 public class Dispatcher {
 	
@@ -21,22 +18,10 @@ public class Dispatcher {
 				get(UserController::defaultPage);
 			});
 		});
-		// initial test route
-		app.routes(() ->{
-			path("/api/test", () -> {
-				get(TestController::testCon);
-			});
-		});
 		// Checks if the user is in the database
 		app.routes(()->{
 			path("/api/users",() ->{
 				get(UserController::getAllUsers);
-			});
-		});
-		// A test variation of the login functionality
-		app.routes(()->{
-			path("/api/check-user", ()->{
-				post(UserController::checkUser);
 			});
 		});
 		// The login functionality
@@ -50,12 +35,6 @@ public class Dispatcher {
 			path("/api/logout", ()->{
 				get(UserController::logOut);
 				post(UserController::logOut);
-			});
-		});
-		// The test variation of registering the user
-		app.routes(()->{
-			path("/api/create-user", ()->{
-				post(UserController::createUser);
 			});
 		});
 		// The register functionality
