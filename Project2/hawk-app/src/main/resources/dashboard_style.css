@@ -1,9 +1,14 @@
+body{
+    background-color: rgb(201, 201, 201);
+}
+
 li.nav-item{
     padding: 0 1em;
 }
 
 table{
     overflow: auto;
+    background-color: rgb(180, 180, 180);
 }
 
 .row{
@@ -22,7 +27,7 @@ tbody > tr {
 }
 
 @keyframes rowfade{
-    0% {opacity: 0; left: 100%;}
+    0% {opacity: 0; left: 10%;}
     100% {opacity: 1; left: 0%;}
 }
 
@@ -53,4 +58,10 @@ tbody > #done{
     position: absolute;
     bottom: 3em;
     left: 25%;
+}
+
+footer{
+    position: absolute;
+    bottom: 0;
+    left: 1em;
 }
