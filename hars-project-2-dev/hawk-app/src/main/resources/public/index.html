@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	 <meta charset="UTF-8">
+		<title>ok</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<h1 id="ok">no way</h1>
+		<form id="form" method="GET" action="/api/airport-results">
+			<label for="latitude">Latitude:</label>
+			<input type="text" placeholder="latitude" name="latitude" id="latitude" />
+			<label for="longitude">Longitude:</label>
+			<input type="text" placeholder="longitude" name="longitude" id="longitude" />
+			<label for="radius">Radius (km):</label>
+			<input type="number" placeholder="radius" name="radius" id="radius" min="0" />
+			
+			<label for="destination-latitude">Destination Latitude:</label>
+			<input type="text" placeholder="destination latitude" name="destination-latitude" id="destination-latitude" />
+			<label for="destination-longitude">Destination Longitude:</label>
+			<input type="text" placeholder="destination longitude" name="destination-longitude" id="destination-longitude" />
+			<label for="destination-radius">Destination Radius:</label>
+			<input type="number" placeholder="destination-radius" name="destination-radius" id="destination-radius" min="0" />
+			<button type="submit" id="button">ok</button>
+		</form>
+	</body>
+</html>
