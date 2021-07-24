@@ -13,6 +13,8 @@
 			var ol = document.getElementById("ol");
 			
 			async function reservations() {
+				var request_access = await RequestAccessToken();
+				var access_token = request_access.access_token;
 				var url = "http://localhost:5000/api/reservations.json";
 				var response = await fetch(url);
 				var json = await response.json();
@@ -69,6 +71,20 @@
 							var number = segments[segment_index].number;
 							var duration = segments[segment_index].duration;
 							var departure_time = segments[segment_index].departure.at;
+							var departure_date = departure_time.split("T")[0];
+							
+							var url = `https://test.api.amadeus.com/v2/schedule/flights?carrierCode=${carrier}&flightNumber=${number}&scheduledDepartureDate=${departure_date}`;
+							var response = await fetch(url, {
+								method: 'GET', 
+								headers: {
+									'Authorization': 'Bearer ' + access_token
+								}
+							});
+							var status_json = await response.json();
+							var status_data = status_json.data[0];
+							console.log(status_data)
+							departure_status = status_data.flightPoints[0].departure.timings[0].hasOwnProperty("delays") ? "DELAYED" : "ON TIME";
+							arrival_status = status_data.flightPoints[1].arrival.timings[0].hasOwnProperty("delays") ? "DELAYED" : "ON TIME";
 							var departure_iata = segments[segment_index].departure.iataCode;
 							var arrival_time = segments[segment_index].arrival.at;
 							var arrival_iata = segments[segment_index].arrival.iataCode;
@@ -78,8 +94,8 @@
 							h5.innerText = `Duration for this flight: ${duration}`;
 							var p_departure = document.createElement("p");
 							var p_arrival = document.createElement("p");
-							p_departure.innerText = `Departing from ${departure_iata} at ${departure_time}`;
-							p_arrival.innerText = `Arriving at ${arrival_iata} at ${arrival_time}`;
+							p_departure.innerText = `Departing from ${departure_iata} at ${departure_time}, Current status: ${departure_status}`;
+							p_arrival.innerText = `Arriving at ${arrival_iata} at ${arrival_time}, Current status: ${arrival_status}`;
 							li_segment.appendChild(h4);
 							li_segment.appendChild(h5);
 							li_segment.appendChild(p_departure);
@@ -91,6 +107,19 @@
 					}
 					ol.appendChild(li);
 				}
+			}
+			
+			async function RequestAccessToken() {
+				var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
+				    method: 'POST',
+				    body: new URLSearchParams({
+				        'grant_type': 'client_credentials',
+				        'client_id': 'OGORt5hAGLuW5GzewaxGCPFVNrKiB0WV',
+				        'client_secret': 'ik6GIT6Y7ui09KcA'
+				    })
+				});
+				var access_json = await request_access.json();
+				return access_json;
 			}
 			
 			window.onload = function() {

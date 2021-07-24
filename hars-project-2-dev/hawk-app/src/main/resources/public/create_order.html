@@ -33,13 +33,13 @@
 				for (let i = 0; i < pricings.length; i++) {
 					var firstNameInput = document.createElement("input");
 					firstNameInput.setAttribute("type", "text");
-					firstNameInput.setAttribute("placeholder", `Passenger ${i} First Name`);
+					firstNameInput.setAttribute("placeholder", `Passenger ${i+1} First Name`);
 					firstNameInput.setAttribute("name", `passenger-${i}-first-name`);
 					firstNameInput.setAttribute("id", `passenger-${i}-first-name`);
 					firstNameInput.className = "name";
 					var lastNameInput = document.createElement("input");
 					lastNameInput.setAttribute("type", "text");
-					lastNameInput.setAttribute("placeholder", `Passenger ${i} Last Name`);
+					lastNameInput.setAttribute("placeholder", `Passenger ${i+1} Last Name`);
 					lastNameInput.setAttribute("name", `passenger-${i}-last-name`);
 					lastNameInput.setAttribute("id", `passenger-${i}-last-name`);
 					lastNameInput.className = "name";
@@ -57,7 +57,7 @@
 				var kvpairs = [];
                 for ( var i = 0; i < form.elements.length; i++ ) {
                    var e = form.elements[i];
-                   if (e.className) {
+                   if (e.className==="name") {
 		             	kvpairs.push(encodeURIComponent(e.name) + "=" + encodeURIComponent(e.value));
 		           	}
 		       	}
