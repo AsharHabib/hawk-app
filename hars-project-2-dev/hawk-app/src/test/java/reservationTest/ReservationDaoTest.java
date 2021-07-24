@@ -26,8 +26,6 @@ public class ReservationDaoTest {
     @Mock
     ResultSet resultSet;
     @Mock
-    Statement statement;
-    @Mock
     PreparedStatement prepStmt;
     @InjectMocks
     public ReservationDaoImpl reservationDaoImpl;
