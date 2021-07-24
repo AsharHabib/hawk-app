@@ -18,13 +18,6 @@ public class User {
 		this.setPassword(password);
 	}
 
-	public String toString(){
-		return "User:"  + String.valueOf(id) + " " + firstName + " " + lastName + " " + email;
-	}
-
-	public boolean equals(User user){
-		return this.id == user.id;
-	}
 
 	public String getPassword() {
 		return password;

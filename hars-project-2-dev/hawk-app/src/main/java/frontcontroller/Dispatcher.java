@@ -5,9 +5,12 @@ import static io.javalin.apibuilder.ApiBuilder.get;
 import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.post;
 
+import controllers.TestController;
+
 //import controllers.UserController;
 import controllers.UserController;
 import io.javalin.Javalin;
+import io.javalin.core.security.Role;
 
 public class Dispatcher {
 	
@@ -18,10 +21,22 @@ public class Dispatcher {
 				get(UserController::defaultPage);
 			});
 		});
+		// initial test route
+		app.routes(() ->{
+			path("/api/test", () -> {
+				get(TestController::testCon);
+			});
+		});
 		// Checks if the user is in the database
 		app.routes(()->{
 			path("/api/users",() ->{
 				get(UserController::getAllUsers);
+			});
+		});
+		// A test variation of the login functionality
+		app.routes(()->{
+			path("/api/check-user", ()->{
+				post(UserController::checkUser);
 			});
 		});
 		// The login functionality
@@ -37,6 +52,12 @@ public class Dispatcher {
 				post(UserController::logOut);
 			});
 		});
+		// The test variation of registering the user
+		app.routes(()->{
+			path("/api/create-user", ()->{
+				post(UserController::createUser);
+			});
+		});
 		// The register functionality
 		app.routes(()->{
 			path("/api/register", ()->{
@@ -49,7 +70,7 @@ public class Dispatcher {
 			});
 		});
 		
-		// First enter latitude/longitude and radius (TODO: modify to accept City, State instead in index.html <script> tag)
+		// First enter latitude/longitude and radius
 		app.routes(()-> {
 			path("/api/airports", () -> {
 				get(UserController::airportsNearest);

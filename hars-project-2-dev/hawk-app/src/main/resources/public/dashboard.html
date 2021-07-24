@@ -19,6 +19,16 @@
 				for (let i = 0; i < json.length; i++) {
 					var reservation_id = JSON.parse(json[i].id);
 					var reservation = JSON.parse(json[i].reservationJSON);
+					var names = JSON.parse(json[i].namesJSON);
+					var passengers = names.passengers;
+					var ul = document.createElement("ul");
+					for (let k = 0; k < passengers.length; k++) {
+						var li = document.createElement("li");
+						li.innerText = `Passenger ${k+1} is ${passengers[k].firstName} ${passengers[k].lastName}`;
+						ul.appendChild(li);
+					}
+					ol.appendChild(ul);
+					
 					var li = document.createElement("li");
 					var itineraries = reservation.itineraries;
 					var grand_total = reservation.price.grandTotal;

@@ -33,7 +33,7 @@ public class ReservationDaoImpl implements ReservationDao {
 			stmt.setInt(1, userId);
 			set = stmt.executeQuery();
 			while (set.next()) {
-				Reservation reservation = new Reservation(set.getInt(1), set.getInt(2), set.getString(3));
+				Reservation reservation = new Reservation(set.getInt(1), set.getInt(2), set.getString(3), set.getString(4));
 				reservations.add(reservation);
 			}
 			
@@ -72,6 +72,7 @@ public class ReservationDaoImpl implements ReservationDao {
 				reservation.setId(set.getInt(1));
 				reservation.setUserId(set.getInt(2));
 				reservation.setReservationJSON(set.getString(3));
+				reservation.setNamesJSON(set.getString(4));
 			}
 			
 		} catch(SQLException e) {
@@ -85,19 +86,20 @@ public class ReservationDaoImpl implements ReservationDao {
 	}
 
 	@Override
-	public void createReservation(int userId, String json) {
+	public void createReservation(int userId, String json, String names) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		
 		try {
 			conn = ConnectionUtil.getConnection();
-			final String SQL = "insert into reservations values(default, ?, ?)";
+			final String SQL = "insert into reservations values(default, ?, ?, ?)";
 			stmt = conn.prepareStatement(SQL);
 			
 			//Since the SQL statement is parameterized, I need to set the values of
 			//the parameters.
 			stmt.setInt(1, userId);
 			stmt.setString(2, json);
+			stmt.setString(3, names);
 			
 			//And of course, execute the SQL statement once you have set your parameters.
 			stmt.execute();

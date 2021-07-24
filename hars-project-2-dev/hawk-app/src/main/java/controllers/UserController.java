@@ -32,6 +32,16 @@ public class UserController {
         context.json(userService.getAllUsers());
     }
 
+    public static void createUser(Context context) {
+        User user = context.bodyAsClass(User.class);
+        userService.createUser(user);
+        context.result("A new user has been created!");
+    }
+
+    public static void checkUser(Context context){
+        User user = context.bodyAsClass(User.class);
+        context.json(userService.checkUser(user));
+    }
     public static void userLogIn(Context context){
         try {
 			User user = userService.userLogIn(context.formParam("email"), context.formParam("password"));
@@ -140,10 +150,11 @@ public class UserController {
     public static void createOrder(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
 			User user = context.sessionAttribute("currentUser");
+			String names = context.formParam("names-json");
 			int userId = user.getId();
 			String jsonCookie = context.cookie("flight");
 			context.removeCookie("flight");
-			reservationService.createReservation(userId, jsonCookie);
+			reservationService.createReservation(userId, jsonCookie, names);
 			context.redirect("/");
 		} else {
     		//Redirect to login if the user isn't logged in

@@ -24,8 +24,8 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	@Override
-	public void createReservation(int userId, String json) {
-		this.reservationDao.createReservation(userId, json);
+	public void createReservation(int userId, String json, String names) {
+		this.reservationDao.createReservation(userId, json, names);
 	}
 
 	@Override
