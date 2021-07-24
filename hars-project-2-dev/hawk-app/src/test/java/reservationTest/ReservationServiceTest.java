@@ -29,13 +29,13 @@ public class ReservationServiceTest {
         reservationServiceImpl = new ReservationServiceImpl();
         MockitoAnnotations.openMocks(this);
         dummyReservations = new ArrayList<>();
-        dummyReservations.add(new Reservation(1,2,"Testing JSON"));
-        dummyReservations.add(new Reservation(2,2,"Reservation JSON"));
-        dummyReservations.add(new Reservation(3,2,"Positive Testing JSON"));
+        dummyReservations.add(new Reservation(1,2,"Testing JSON","Passenger Test Name Wan"));
+        dummyReservations.add(new Reservation(2,2,"Reservation JSON","Passenger Test Name Wong"));
+        dummyReservations.add(new Reservation(3,2,"Positive Testing JSON","Passenger Test Name Wing"));
         int mockUserId = 2;
         Mockito.when(reservationDaoImpl.getAllReservations(mockUserId)).thenReturn(dummyReservations);
         int mockReservationId = 2;
-        mockReservation = new Reservation(2,3,"Get Reservation JSON");
+        mockReservation = new Reservation(2,3,"Get Reservation JSON","Passenger Test Name Win");
         Mockito.when(reservationDaoImpl.getReservation(mockReservationId)).thenReturn(mockReservation);
     }
 
