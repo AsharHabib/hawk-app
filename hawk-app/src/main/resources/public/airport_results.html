@@ -6,40 +6,41 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 		<link rel="stylesheet" href="./styles/airportResults.css">
+		<link rel="stylesheet" href="./styles/navbar.css">
 	</head>
 	<body>
-<!--	<h1 id="ok">something</h1>
-		<form id="form" method="GET" action="/search-results">
-			<ol id="ol-current"></ol>
-			<ol id="ol-destination"></ol>
-			<label for="departureDate">Departure Date</label>
-			<input type="date" id="departureDate" name="departureDate"/>
-			<label for="returnDate">Return Date</label>
-			<input type="date" id="returnDate" name="returnDate" />
-			<label for="adults">Number of Passengers:</label>
-			<input type="number" id="adults" name="adults" />
-			<label for="travelClass">Class</label>
-			<select id="travelClass" name="travelClass">
-				<option value="ECONOMY">Economy</option>
-				<option value="PREMIUM_ECONOMY">Premium Economy</option>
-				<option value="BUSINESS">Business</option>
-				<option value="FIRST">First</option>
-			</select>
-			<label for="nonStop">Non-Stop?</label>
-			<input type="radio" id="nonStop" name="nonStop" value="true" />
-			<label for="connected">Connected?</label>
-			<input type="radio" id="connected" name="nonStop" value="false" />
-			<label for="maxPrice">Max Price</label>
-			<input type="number" id="maxPrice" name="maxPrice" />
-			<button type="submit" id="button">button</button>
-		</form> -->
-		
+	<!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #044ea0;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><img id="imgLogo" src="./images/logo_no_bg.png" alt="hars_logo"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Current Bookings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Flight Statuses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Previous Bookings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Book New Trip</a>
+                        </li>
+                        <li class="nav-item logout">
+                            <a class="nav-link active" aria-current="page" href="#">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+		<!-- Content -->
 		<div class="container">
         <div id="formRow" class="row">
-            <div class="col-5">
-                <!-- Form Header -->
-
-                <div id="formNav">
+        <div id="formNav">
                     <ul class="nav nav-pills nav-fill">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Search</a>
@@ -48,13 +49,11 @@
                             <a class="nav-link disabled" href="#" >Results</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled" href="#">Review</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Checkout</a>
                         </li>
                     </ul>
                 </div>
+            <div class="col-5">
                 <!-- Radios (One-Way and Round-Trip) -->
                 <div id="radios">
                     <div class="form-check form-check-inline firstRadios">
@@ -113,7 +112,7 @@
                     <div class="col-md">
                         <h5 class="numOfPass">Number of Passengers</h5>
                       <div class="form-floating">
-                        <input type="number" class="form-control" id="adults" name="adults" placeholder="name@example.com" value="1">
+                        <input type="number" class="form-control" id="adults" name="adults" placeholder="name@example.com" value="1" min="1">
                         <label for="adults">Adults</label>
                       </div>
                     </div>
@@ -138,30 +137,6 @@
                 <div id="classRadios" class="row g-2">
                     <div class="col-md">
                         <h5 id="classHeader">Class</h5>
-                        <!-- <div class="form-check form-check-inline secondRadios">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-                            <label class="form-check-label classLabel" for="flexRadioDefault1">
-                              Economy
-                            </label>
-                          </div>
-                          <div class="form-check form-check-inline secondRadios">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                            <label class="form-check-label classLabel" for="flexRadioDefault2">
-                              Premium-Economy
-                            </label>
-                          </div>
-                          <div class="form-check form-check-inline secondRadios">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
-                            <label class="form-check-label classLabel" for="flexRadioDefault3">
-                              Business-Class
-                            </label>
-                          </div>
-                          <div class="form-check form-check-inline secondRadios">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4">
-                            <label class="form-check-label classLabel" for="flexRadioDefault4">
-                              First-Class
-                            </label>
-                          </div> -->
                        <div class="form-floating">
                         <select class="form-select" id="travelClass" name="travelClass" aria-label="Floating label select example">
 							<option value="ECONOMY">Economy</option>
@@ -175,12 +150,13 @@
                     <div class="col-md">
                         <h5 class="numOfPass">Max Price</h5>
                       <div class="form-floating">
-                        <input type="money" class="form-control" id="maxPrice" name="maxPrice" placeholder="name@example.com" value="0.00">
+                        <input type="money" class="form-control" id="maxPrice" name="maxPrice" placeholder="name@example.com" value="0.00" min="0">
                         <label for="maxPrice">Price</label>
                       </div>
                     </div>
                 </div>
                     <!-- Button -->
+                    <button id="backBtn" type="button" class="btn btn-primary btn-lg">Back</button>
                     <button id="button" type="submit" class="btn btn-primary btn-lg">Next</button>
                 </form>
             </div>

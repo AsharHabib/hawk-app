@@ -13,15 +13,10 @@
   padding-bottom: 1em;
 }
 
-#backBtn {
-	margin-top: 2em;
-	margin-bottom: 2em;
-}
-
 #button {
   float: right;
-  margin-top: 2em;
   margin-bottom: 2em;
+  margin-top: 2em;
 }
 
 .resultCards {
@@ -122,9 +117,38 @@ hr {
 	margin-top: 3px;
 }
 
-#buttonsDiv {
-	background-color: white;
-	border-top: 1px solid black;
-    position: sticky;
-	bottom: 0;
+#checkout {
+	color: #044ea0;
+	font-weight: 800;
+	margin-top: 5px;
+	float: left;
+}
+
+.text-center {
+	margin-top: 2em;
+}
+
+.col-md {
+	margin-top: 2em;
+}
+
+.nameOnCard {
+	float: left;
+	font-weight: 700;
+	color: #044ea0;
+}
+
+#backBtn {
+	float: left;
+	margin-top: 1em;
+}
+
+#confirmBtn {
+	float: right;
+	margin-right: 25px;
+	margin-top: 1em;
+}
+
+.resultCards {
+	margin-bottom: 2em;
 }

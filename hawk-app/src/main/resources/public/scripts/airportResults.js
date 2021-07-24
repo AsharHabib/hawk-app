@@ -1,8 +1,29 @@
+			/* Ashar's Date Code */
+			var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+             if(dd<10){
+                    dd='0'+dd
+                } 
+                if(mm<10){
+                    mm='0'+mm
+                } 
+
+            today = yyyy+'-'+mm+'-'+dd;
+			
 			// Raymond's Code
 			const oneRadio = document.getElementById("inlineRadio1");
 			const roundRadio = document.getElementById("inlineRadio2");
 			const returnDate = document.getElementById("returnDate");
 			const returnDateInput = document.getElementById("returnDateInput");
+			document.getElementById("departureDate").setAttribute("min", today);
+            returnDateInput.setAttribute("min", today);
+			
+			let backBtn = document.getElementById("backBtn");
+			backBtn.addEventListener("click", function() {
+				history.back();
+			});
 			
 			oneRadio.addEventListener("click", function () {
 			  returnDate.classList.add("invisible");
@@ -29,8 +50,6 @@
 			console.log(latitude_query, longitude_query, radius_query, destination_latitude_query, destination_longitude_query, destination_radius_query);
 			
 			var form = document.getElementById("form");
-	//		var ol_current = document.getElementById("ol-current");
-	//		var ol_destination = document.getElementById("ol-destination");
 			var button = document.getElementById("button");
 			var modal = document.getElementById("myModal");
 			
@@ -51,20 +70,6 @@
 				console.log(airports);
 				if (current) {
 					for (let index in airports) {
-					/*	var li = document.createElement("li");
-						var radio = document.createElement("input");
-						var label = document.createElement("label");
-						li.innerText = `${airports[index].name}, ${airports[index].distance.value} away`;
-						label.innerText = "Choose your takeoff airport";
-						radio.setAttribute("type", "radio");
-						radio.setAttribute("name", "originLocationCode");
-						radio.setAttribute("id", `${airports[index].iataCode}`);
-						radio.setAttribute("value", `${airports[index].iataCode}`);
-						label.setAttribute("for", `${airports[index].iataCode}`);
-						li.appendChild(label);
-						li.appendChild(radio);
-						ol_current.appendChild(li); */
-						
 						let option = document.createElement("option");
 						//option.setAttribute("name", "originLocationCode");
 						option.setAttribute("id", `${airports[index].iataCode}`);
@@ -75,20 +80,6 @@
 					}
 				} else {
 					for (let index in airports) {
-					/*	var li = document.createElement("li");
-						var radio = document.createElement("input");
-						var label = document.createElement("label");
-						li.innerText = `${airports[index].name}, ${airports[index].distance.value} away`;
-						label.innerText = "Choose your takeoff airport";
-						radio.setAttribute("type", "radio");
-						radio.setAttribute("name", "destinationLocationCode");
-						radio.setAttribute("id", `${airports[index].iataCode}`);
-						radio.setAttribute("value", `${airports[index].iataCode}`);
-						label.setAttribute("for", `${airports[index].iataCode}`);
-						li.appendChild(label);
-						li.appendChild(radio);
-						ol_destination.appendChild(li); */
-						
 						let option = document.createElement("option");
 						//option.setAttribute("name", "originLocationCode");
 						option.setAttribute("id", `${airports[index].iataCode}`);

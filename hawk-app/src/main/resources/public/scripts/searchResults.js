@@ -1,46 +1,14 @@
-			/* Ashar's Date Code */
-			/*var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth()+1; //January is 0!
-            var yyyy = today.getFullYear();
-             if(dd<10){
-                    dd='0'+dd
-                } 
-                if(mm<10){
-                    mm='0'+mm
-                } 
-
-            today = yyyy+'-'+mm+'-'+dd;
-            document.getElementById("departureDate").setAttribute("min", today); */
 			
 			/* Raymond's Code */			
 			let form = document.getElementById("form");
 			
-			let spanFlights = document.createElement("span");
-			spanFlights.classList.add("traveller-cards");
-			form.appendChild(spanFlights);
+			let spanFlights = document.getElementById("spanFlights");
 			
-			let backBtn = document.createElement("button");
-			backBtn.setAttribute("id", "backBtn");
-			backBtn.setAttribute("type", "button");
-			backBtn.classList.add("btn");
-			backBtn.classList.add("btn-primary");
-			backBtn.classList.add("btn-lg");
-			backBtn.innerHTML = "Back";
+			let backBtn = document.getElementById("backBtn");
 			backBtn.addEventListener("click", function() {
 				history.back();
 			});
 			
-			let nextBtn = document.createElement("button");
-			nextBtn.setAttribute("id", "button");
-			nextBtn.setAttribute("type", "submit");
-			nextBtn.classList.add("btn");
-			nextBtn.classList.add("btn-primary");
-			nextBtn.classList.add("btn-lg");
-			nextBtn.innerHTML = "Next";
-			
-			form.appendChild(backBtn);
-			form.appendChild(nextBtn);
 			
 			/* Ashar's Code */
 			// var form = document.getElementById("form");
@@ -66,58 +34,6 @@
 				var urlParams = new URLSearchParams(window.location.search);
 				console.log(flights);
 				for (let index in flights) {
-					/* var li = document.createElement("li");
-					var radio = document.createElement("input");
-					radio.setAttribute("type", "radio");
-					radio.setAttribute("name", "flightSelection");
-					radio.setAttribute("value", index);
-					
-					var itineraries = flights[index].itineraries;
-					var grand_total = flights[index].price.grandTotal;
-					var h3 = document.createElement("h3");
-					h3.innerText = `Grand Total $${grand_total}`;
-					li.appendChild(h3);
-					for (let itinerary_index in itineraries) {
-						var div_itinerary = document.createElement("div");
-						var segments = itineraries[itinerary_index].segments;
-						var h4_duration = document.createElement("h4");
-						var total_duration = itineraries[itinerary_index].duration;
-						if (itinerary_index == 0) {
-							h4_duration.innerText = `Total duration to the destination: ${total_duration}`;
-						} else {
-							h4_duration.innerText = `Total duration back to arrival: ${total_duration}`;
-						}
-						div_itinerary.appendChild(h4_duration);
-						var ol_segment = document.createElement("ol");
-						for (let segment_index in segments) {
-							var li_segment = document.createElement("li");
-							var carrier = segments[segment_index].carrierCode;
-							var number = segments[segment_index].number;
-							var duration = segments[segment_index].duration;
-							var departure_time = segments[segment_index].departure.at;
-							var departure_iata = segments[segment_index].departure.iataCode;
-							var arrival_time = segments[segment_index].arrival.at;
-							var arrival_iata = segments[segment_index].arrival.iataCode;
-							var h4 = document.createElement("h4");
-							h4.innerText = `Carrier information: ${carrier} ${number}`;
-							var h5 = document.createElement("h5");
-							h5.innerText = `Duration for this flight: ${duration}`;
-							var p_departure = document.createElement("p");
-							var p_arrival = document.createElement("p");
-							p_departure.innerText = `Departing from ${departure_iata} at ${departure_time}`;
-							p_arrival.innerText = `Arriving at ${arrival_iata} at ${arrival_time}`;
-							li_segment.appendChild(h4);
-							li_segment.appendChild(h5);
-							li_segment.appendChild(p_departure);
-							li_segment.appendChild(p_arrival);
-							ol_segment.appendChild(li_segment);
-						}
-						div_itinerary.appendChild(ol_segment);
-						li.appendChild(div_itinerary);
-					}
-					li.appendChild(radio);
-					ol.appendChild(li); */
-					
 					
 					let div1 = document.createElement("div");
 					div1.classList.add("card")
@@ -173,6 +89,48 @@
 							let arrival_time = segments[segment_index].arrival.at;
 							let arrival_iata = segments[segment_index].arrival.iataCode;
 							
+							// Duration Converted
+							let newDuration = duration.slice(2);
+							let hourIdx = newDuration.indexOf("H");
+							let minIdx = newDuration.indexOf("M");
+							let hour = newDuration.substring(0, hourIdx);
+							let minute = newDuration.substring(hourIdx + 1, minIdx);
+							let trueDuration = hour + " " + "Hours and " + minute + " Minutes";
+							
+							// Departing Converted
+							let timeIdx = departure_time.indexOf("T");
+							let departDate = departure_time.substring(0, timeIdx);
+							let departMilitaryTime = departure_time.substring(timeIdx + 1);
+							
+							function convertTime(time, date) {
+								time = time.split(':');
+								let hours = Number(time[0]);
+								let minutes = Number(time[1]);
+								let seconds = Number(time[2]);
+								// calculate
+								let timeValue;
+								
+								if (hours > 0 && hours <= 12) {
+								  timeValue= "" + hours;
+								} else if (hours > 12) {
+								  timeValue= "" + (hours - 12);
+								} else if (hours == 0) {
+								  timeValue= "12";
+								}
+								timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
+								timeValue += (hours >= 12) ? " P.M." : " A.M."; 
+								let newTime = date + " at " + timeValue;	
+								return newTime;
+							}
+							
+							let newDepart = convertTime(departMilitaryTime, departDate);
+							
+							// Arival Converted
+							let arriveTimeIdx = arrival_time.indexOf("T");
+							let arriveDate = arrival_time.substring(0, arriveTimeIdx);
+							let arriveMilitaryTime = arrival_time.substring(arriveTimeIdx + 1);
+							let newArrive = convertTime(arriveMilitaryTime, arriveDate);
+							
 							let div4 = document.createElement("div");
 							div4.classList.add("departingDiv");
 							
@@ -208,7 +166,7 @@
 							
 							let durationP = document.createElement("p");
 							durationP.classList.add("departBody");
-							durationP.innerHTML = `Duration of Flight: ${duration}`;
+							durationP.innerHTML = `Duration of Flight: ${trueDuration}`;
 							div4.appendChild(durationP);
 							
 							let divRow = document.createElement("div");
@@ -221,7 +179,7 @@
 							
 							let departP = document.createElement("p");
 							departP.classList.add("departBody");
-							departP.innerHTML = `Departing from ${departure_iata} at ${departure_time}`;
+							departP.innerHTML = `Departing from ${departure_iata} on ${newDepart}`;
 							div5.appendChild(departP);
 							divRow.appendChild(div5);
 							
@@ -231,7 +189,7 @@
 							
 							let ariveP = document.createElement("p");
 							ariveP.classList.add("departBody");
-							ariveP.innerHTML = `Arriving at ${arrival_iata} at ${arrival_time}`;
+							ariveP.innerHTML = `Arriving at ${arrival_iata} on ${newArrive}`;
 							div6.appendChild(ariveP);
 							divRow.appendChild(div6);
 							div4.appendChild(divRow);

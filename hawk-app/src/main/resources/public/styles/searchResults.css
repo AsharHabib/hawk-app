@@ -15,12 +15,13 @@
 
 #backBtn {
 	margin-top: 2em;
+	margin-bottom: 2em;
 }
 
 #button {
   float: right;
-  margin-bottom: 2em;
   margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 .resultCards {
@@ -119,4 +120,11 @@ hr {
 
 .conn {
 	margin-top: 3px;
+}
+
+#buttonsDiv {
+	background-color: white;
+	border-top: 1px solid black;
+    position: sticky;
+	bottom: 0;
 }
