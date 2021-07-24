@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	 	<meta charset="UTF-8">
+		<title>Confirm Order</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<form method="POST" action="/api/create-order" id="form">
+			<input type="text" />
+			<input type="text" />
+			<input type="text" />
+			<input type="number" />
+			<input type="password" />
+			<input type="hidden" name="names-json" id="names-json" />
+		</form>
+		
+		<script>
+			var form = document.getElementById("form");
+			var button = document.getElementById("button");
+			var cookieValue = document.cookie
+							  .split('=')[1];
+			var flight_search_offer = JSON.parse(cookieValue);
+			flight_search_offer.disablePricing = true;
+			flight_search_offer.paymentCardRequired = false;
+			
+			function inputPassengerNames() {
+				var form = document.getElementById("form");
+				var button = document.createElement("button");
+				button.setAttribute("type", "submit");
+				button.innerText = "Confirm Order";
+				var pricings = flight_search_offer.travelerPricings;
+				for (let i = 0; i < pricings.length; i++) {
+					var firstNameInput = document.createElement("input");
+					firstNameInput.setAttribute("type", "text");
+					firstNameInput.setAttribute("placeholder", `Passenger ${i+1} First Name`);
+					firstNameInput.setAttribute("name", `passenger-${i}-first-name`);
+					firstNameInput.setAttribute("id", `passenger-${i}-first-name`);
+					firstNameInput.className = "name";
+					var lastNameInput = document.createElement("input");
+					lastNameInput.setAttribute("type", "text");
+					lastNameInput.setAttribute("placeholder", `Passenger ${i+1} Last Name`);
+					lastNameInput.setAttribute("name", `passenger-${i}-last-name`);
+					lastNameInput.setAttribute("id", `passenger-${i}-last-name`);
+					lastNameInput.className = "name";
+					form.appendChild(firstNameInput);
+					form.appendChild(lastNameInput);
+				}
+				form.appendChild(button);
+			}
+			
+			window.onload = function () {
+				inputPassengerNames();
+			}
+			
+			form.onsubmit = function () {
+				var kvpairs = [];
+                for ( var i = 0; i < form.elements.length; i++ ) {
+                   var e = form.elements[i];
+                   if (e.className==="name") {
+		             	kvpairs.push(encodeURIComponent(e.name) + "=" + encodeURIComponent(e.value));
+		           	}
+		       	}
+		       	var names = {
+					"passengers": []
+				};
+				for (var i = 0; i < parseInt(kvpairs.length/2); i++) {
+					var bothNames = {
+						"firstName" : `${kvpairs[2*i].split("=")[1]}`,
+						"lastName" : `${kvpairs[2*i + 1].split("=")[1]}`
+					};
+					names.passengers.push(bothNames);
+				}
+				document.getElementById("names-json").setAttribute("value", JSON.stringify(names));
+				document.cookie = "flight=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ SameSite=None; Secure;";
+			}
+			
+		</script>
+	</body>
+</html>

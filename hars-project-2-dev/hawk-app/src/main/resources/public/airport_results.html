@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	 	<meta charset="UTF-8">
+		<title>Airport Results</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<h1 id="ok">something</h1>
+		<form id="form" method="GET" action="/api/search-results">
+			<ol id="ol-current"></ol>
+			<ol id="ol-destination"></ol>
+			<label for="departureDate">Departure Date</label>
+			<input type="date" id="departureDate" name="departureDate"/>
+			<label for="returnDate">Return Date</label>
+			<input type="date" id="returnDate" name="returnDate" />
+			<label for="adults">Number of Passengers:</label>
+			<input type="number" id="adults" name="adults" min="1" />
+			<label for="travelClass">Class</label>
+			<select id="travelClass" name="travelClass">
+				<option value="ECONOMY">Economy</option>
+				<option value="PREMIUM_ECONOMY">Premium Economy</option>
+				<option value="BUSINESS">Business</option>
+				<option value="FIRST">First</option>
+			</select>
+			<label for="nonStop">Non-Stop?</label>
+			<input type="radio" id="nonStop" name="nonStop" value="true" />
+			<label for="connected">Connected?</label>
+			<input type="radio" id="connected" name="nonStop" value="false" />
+			<label for="maxPrice">Max Price</label>
+			<input type="number" id="maxPrice" name="maxPrice" min="1" />
+			<button type="submit" id="button">button</button>
+		</form>
+		<script>
+			var urlParams = new URLSearchParams(window.location.search);
+
+			var departureCity = urlParams.get('departureCity');
+			var departureState = urlParams.get('departureState');
+			var radius = urlParams.get('radius');
+			var arrivalCity = urlParams.get('arrivalCity');
+			var arrivalState = urlParams.get('arrivalState');
+			var destinationRadius = urlParams.get('destination-radius');
+			
+			async function latLongGoogleAPI(city, state) {
+				var url = `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+${state}&key=` + "AIzaSyD7MGumrOiKucDKRyuT_KJe1YsbZrMMcdw";
+				var response = await fetch(url);
+				var json = await response.json();
+				return json;
+			}
+			
+			var form = document.getElementById("form");
+			var ol_current = document.getElementById("ol-current");
+			var ol_destination = document.getElementById("ol-destination");
+			var button = document.getElementById("button");
+			
+			var airports = null;
+			async function AirportsNearest(city_query, state_query, radius, current=true) {
+				var request_access = await RequestAccessToken();
+				var latLong = await latLongGoogleAPI(city_query, state_query);
+				var latitude = latLong.results[0].geometry.location.lat;
+				var longitude = latLong.results[0].geometry.location.lng;
+				console.log(latitude + " " + longitude);
+				
+				var url = "https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=" + latitude + "&longitude=" + longitude + "&radius=" + radius;
+				var access_token = request_access.access_token;
+				var response = await fetch(url, {
+					method: 'GET', 
+					headers: {
+						'Authorization': 'Bearer ' + access_token
+					}
+				});
+				var json = await response.json();
+				airports = json.data;
+				console.log(airports);
+				if (current) {
+					for (let index in airports) {
+						var li = document.createElement("li");
+						var radio = document.createElement("input");
+						var label = document.createElement("label");
+						li.innerText = `${airports[index].name}, ${airports[index].distance.value} away`;
+						label.innerText = "Choose your takeoff airport";
+						radio.setAttribute("type", "radio");
+						radio.setAttribute("name", "originLocationCode");
+						radio.setAttribute("id", `${airports[index].iataCode}`);
+						radio.setAttribute("value", `${airports[index].iataCode}`);
+						label.setAttribute("for", `${airports[index].iataCode}`);
+						li.appendChild(label);
+						li.appendChild(radio);
+						ol_current.appendChild(li);
+						console.log('ok');
+					}
+				} else {
+					for (let index in airports) {
+						var li = document.createElement("li");
+						var radio = document.createElement("input");
+						var label = document.createElement("label");
+						li.innerText = `${airports[index].name}, ${airports[index].distance.value} away`;
+						label.innerText = "Choose your takeoff airport";
+						radio.setAttribute("type", "radio");
+						radio.setAttribute("name", "destinationLocationCode");
+						radio.setAttribute("id", `${airports[index].iataCode}`);
+						radio.setAttribute("value", `${airports[index].iataCode}`);
+						label.setAttribute("for", `${airports[index].iataCode}`);
+						li.appendChild(label);
+						li.appendChild(radio);
+						ol_destination.appendChild(li);
+					}
+				}
+			}
+			
+			async function RequestAccessToken() {
+				var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
+				    method: 'POST',
+				    body: new URLSearchParams({
+				        'grant_type': 'client_credentials',
+				        'client_id': 'OGORt5hAGLuW5GzewaxGCPFVNrKiB0WV',
+				        'client_secret': 'ik6GIT6Y7ui09KcA'
+				    })
+				});
+				var access_json = await request_access.json();
+				return access_json;
+			}
+			
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; //January is 0!
+			var yyyy = today.getFullYear();
+			 if(dd<10){
+			        dd='0'+dd
+			    } 
+			    if(mm<10){
+			        mm='0'+mm
+			    } 
+
+			today = yyyy+'-'+mm+'-'+dd;
+			document.getElementById("departureDate").setAttribute("min", today);
+			document.getElementById("returnDate").setAttribute("min", today);
+			document.getElementById("departureDate").addEventListener("change", () => {
+				document.getElementById("returnDate").setAttribute("min", document.getElementById("departureDate").value);
+			});
+			
+			window.onload = function () {
+				
+				AirportsNearest(departureCity, departureState, radius);
+				AirportsNearest(arrivalCity, arrivalState, destinationRadius, false);
+			}
+		</script>
+	</body>
+</html>

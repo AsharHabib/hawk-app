@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-/.metadata/
-=======
 # git ls-files --others --exclude-from=.git/info/exclude
 # Lines that start with '#' are comments.
 # For a project mostly in C, the following would be a good set of
@@ -77,4 +74,3 @@ yarn-error.log
 # System Files
 .DS_Store
 Thumbs.db
->>>>>>> c71be8f78b629c065894638795721333b97e9db9
