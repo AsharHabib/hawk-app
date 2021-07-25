@@ -17,8 +17,14 @@
 			const roundRadio = document.getElementById("inlineRadio2");
 			const returnDate = document.getElementById("returnDate");
 			const returnDateInput = document.getElementById("returnDateInput");
-			document.getElementById("departureDate").setAttribute("min", today);
-            returnDateInput.setAttribute("min", today);
+			/* document.getElementById("departureDate").setAttribute("min", today);
+            returnDateInput.setAttribute("min", today); */
+            document.getElementById("departureDate").setAttribute("min", today);
+			document.getElementById("returnDate").setAttribute("min", today);
+			document.getElementById("departureDate").addEventListener("change", () => {
+				returnDate.setAttribute("min", document.getElementById("departureDate").value);
+			});
+
 			
 			let backBtn = document.getElementById("backBtn");
 			backBtn.addEventListener("click", function() {
@@ -41,21 +47,37 @@
 			
 			// Ashar's Code
 			var urlParams = new URLSearchParams(window.location.search);
-			var latitude_query = urlParams.get('latitude');
-			var longitude_query = urlParams.get('longitude');
+			/*var latitude_query = urlParams.get('latitude');*/
+			var departureCity = urlParams.get('departureCity');
+			var departureState = urlParams.get('departureState');
+			/*var longitude_query = urlParams.get('longitude');*/
 			var radius_query = urlParams.get('radius');
-			var destination_latitude_query = urlParams.get('destination-latitude');
-			var destination_longitude_query = urlParams.get('destination-longitude');
+			/*var destination_latitude_query = urlParams.get('destination-latitude');*/
+			var arrivalCity = urlParams.get('arrivalCity');
+			/*var destination_longitude_query = urlParams.get('destination-longitude');*/
+			var arrivalState = urlParams.get('arrivalState');
 			var destination_radius_query = urlParams.get('destination-radius')
-			console.log(latitude_query, longitude_query, radius_query, destination_latitude_query, destination_longitude_query, destination_radius_query);
 			
 			var form = document.getElementById("form");
 			var button = document.getElementById("button");
 			var modal = document.getElementById("myModal");
 			
+			async function latLongGoogleAPI(city, state) {
+				var url = `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+${state}&key=` + "AIzaSyD7MGumrOiKucDKRyuT_KJe1YsbZrMMcdw";
+				var response = await fetch(url);
+				var json = await response.json();
+				return json;
+			}
+
+			
+			
 			var airports = null;
-			async function AirportsNearest(latitude_query, longitude_query, radius_query, current=true) {
+			async function AirportsNearest(city_query, state_query, radius_query, current=true) {
 				var request_access = await RequestAccessToken();
+				var latLong = await latLongGoogleAPI(city_query, state_query);
+				var latitude_query = latLong.results[0].geometry.location.lat;
+				var longitude_query = latLong.results[0].geometry.location.lng;
+
 				
 				var url = "https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=" + latitude_query + "&longitude=" + longitude_query + "&radius=" + radius_query;
 				var access_token = request_access.access_token;
@@ -105,6 +127,7 @@
 			}
 			
 			window.onload = function () {
-				AirportsNearest(latitude_query, longitude_query, radius_query);
-				AirportsNearest(destination_latitude_query, destination_longitude_query, destination_radius_query, false);
+				AirportsNearest(departureCity, departureState, radius_query);
+				AirportsNearest(arrivalCity, arrivalState, destination_radius_query, false);
+
 			}
