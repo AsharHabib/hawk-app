@@ -41,7 +41,7 @@ public class Dispatcher {
 		});
 		// The login functionality
 		app.routes(()->{
-			path("/api/login", ()->{
+			path("/login", ()->{
 				post(UserController::userLogIn);
 			});
 		});
@@ -58,18 +58,35 @@ public class Dispatcher {
 				post(UserController::createUser);
 			});
 		});
+		// link to register page
+		app.routes(()->{
+			path("/api/registerUserPage", ()->{
+				get(UserController::registerUserPage);
+			});
+		});
 		// The register functionality
 		app.routes(()->{
 			path("/api/register", ()->{
 				post(UserController::registerUser);
 			});
 		});
+		// Dashboard- Current bookings		
 		app.routes(()->{
-			path("/api/dashboard", ()-> {
+			path("/dashboard", ()-> {
 				get(UserController::userDashboard);
 			});
 		});
-		
+		app.routes(()->{
+			path("/api/dashboard_previous", ()-> {
+				get(UserController::userDashboard);
+			});
+		});
+		// Dashboard- Flight statuses
+		app.routes(()->{
+			path("/api/dashboard_flightstatus", ()-> {
+				get(UserController::userDashboardFlightStatus);
+			});
+		});
 		// First enter latitude/longitude and radius
 		app.routes(()-> {
 			path("/api/airports", () -> {

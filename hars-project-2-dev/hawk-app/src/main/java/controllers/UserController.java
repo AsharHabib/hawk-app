@@ -52,14 +52,17 @@ public class UserController {
 			context.redirect("/");
 		}
     }
+    
     public static void registerUser(Context context){
         userService.registerUser(context.formParam("firstName"),
                 context.formParam("lastName"),
                 context.formParam("email"),
                 context.formParam("password"));
-        context.render("public/index.html");
+        context.render("public/dashboard.html");
     }
-
+    public static void registerUserPage(Context context) {
+    	context.render("public/new_user.html");
+    }
     public static void defaultPage(Context context){
         if (context.sessionAttribute("currentUser") == null) {
 			context.render("public/login.html");
@@ -71,6 +74,30 @@ public class UserController {
     public static void userDashboard(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
     		context.render("public/dashboard.html");
+    	} else {
+    		context.redirect("/");
+    	}
+    }
+    
+    public static void userDashboardFlightStatus(Context context) {
+    	if (context.sessionAttribute("currentUser") != null) {
+    		context.render("public/dashboard_flight_statuses.html");
+    	} else {
+    		context.redirect("/");
+    	}
+    }
+    
+    public static void userPrevious(Context context) {
+    	if (context.sessionAttribute("currentUser") != null) {
+    		context.render("public/dashboard_previous.html");
+    	} else {
+    		context.redirect("/");
+    	}
+    }
+    
+    public static void userFlight(Context context) {
+    	if (context.sessionAttribute("currentUser") != null) {
+    		context.render("public/dashboard_flightstatus.html");
     	} else {
     		context.redirect("/");
     	}

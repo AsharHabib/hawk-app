@@ -10,7 +10,7 @@ public class Main {
 		Javalin app = Javalin.create(config -> {
 			config.addStaticFiles("/public");
 		}).start(5000);
-
+		
 		app.get("/airport-results", context -> {
 	    	context.render("./public/airport_results.html");
 	    });
