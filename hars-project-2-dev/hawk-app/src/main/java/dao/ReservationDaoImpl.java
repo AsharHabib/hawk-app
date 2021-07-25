@@ -149,6 +149,7 @@ public class ReservationDaoImpl implements ReservationDao {
 		} finally {
 			ResourceClosers.closeConnection(conn);
 			ResourceClosers.closeStatement(stmt);
+			ResourceClosers.closeStatement(cascadeDeleteStmt);
 		}
 	}
 
