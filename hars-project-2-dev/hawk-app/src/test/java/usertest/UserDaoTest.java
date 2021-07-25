@@ -78,6 +78,8 @@ public class UserDaoTest {
     @Test
     public void registerUser(){
         User expectedUser = new User(10,"Slime","Monkey","isekai@lakers.com","slime");
+        // The same procedure is being used in the actual database to avoid cluttering the actual database the data
+        // being created is stored in the test database
         try{
             // This is the local data base url, username and password for testing
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/","postgres","kent123q");
@@ -96,6 +98,11 @@ public class UserDaoTest {
             resultSet = prepStmt.executeQuery();
             // Assertion to ensure the user is created, check if there's something in the result set
             Assert.assertTrue(resultSet.next());
+            // Then we need to delete to avoid affecting future tests.
+            final String SQLTwo = "delete from users where user_email = ?";
+            prepStmt = connection.prepareStatement(SQLTwo);
+            prepStmt.setString(1,expectedUser.getEmail());
+            prepStmt.execute();
         }
         catch(SQLException e) {
             e.printStackTrace();

@@ -4,12 +4,20 @@ public class Reservation {
 	private int id;
 	private int userId;
 	private String reservationJSON;
+	private String namesJSON;
 	
-	public Reservation(int id, int userId, String reservationJSON) {
+	public Reservation(int id, int userId, String reservationJSON, String namesJSON) {
 		super();
 		this.id = id;
 		this.userId = userId;
 		this.reservationJSON = reservationJSON;
+		this.namesJSON = namesJSON;
+	}
+	public String getNamesJSON() {
+		return namesJSON;
+	}
+	public void setNamesJSON(String namesJSON) {
+		this.namesJSON = namesJSON;
 	}
 	public Reservation() {
 		super();

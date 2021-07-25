@@ -32,6 +32,16 @@ public class UserController {
         context.json(userService.getAllUsers());
     }
 
+    public static void createUser(Context context) {
+        User user = context.bodyAsClass(User.class);
+        userService.createUser(user);
+        context.result("A new user has been created!");
+    }
+
+    public static void checkUser(Context context){
+        User user = context.bodyAsClass(User.class);
+        context.json(userService.checkUser(user));
+    }
     public static void userLogIn(Context context){
         try {
 			User user = userService.userLogIn(context.formParam("email"), context.formParam("password"));
@@ -42,14 +52,17 @@ public class UserController {
 			context.redirect("/");
 		}
     }
+    
     public static void registerUser(Context context){
         userService.registerUser(context.formParam("firstName"),
                 context.formParam("lastName"),
                 context.formParam("email"),
                 context.formParam("password"));
-        context.render("public/index.html");
+        context.render("public/dashboard.html");
     }
-
+    public static void registerUserPage(Context context) {
+    	context.render("public/new_user.html");
+    }
     public static void defaultPage(Context context){
         if (context.sessionAttribute("currentUser") == null) {
 			context.render("public/login.html");
@@ -61,6 +74,30 @@ public class UserController {
     public static void userDashboard(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
     		context.render("public/dashboard.html");
+    	} else {
+    		context.redirect("/");
+    	}
+    }
+    
+    public static void userDashboardFlightStatus(Context context) {
+    	if (context.sessionAttribute("currentUser") != null) {
+    		context.render("public/dashboard_flight_statuses.html");
+    	} else {
+    		context.redirect("/");
+    	}
+    }
+    
+    public static void userPrevious(Context context) {
+    	if (context.sessionAttribute("currentUser") != null) {
+    		context.render("public/dashboard_previous.html");
+    	} else {
+    		context.redirect("/");
+    	}
+    }
+    
+    public static void userFlight(Context context) {
+    	if (context.sessionAttribute("currentUser") != null) {
+    		context.render("public/dashboard_flightstatus.html");
     	} else {
     		context.redirect("/");
     	}
@@ -140,10 +177,11 @@ public class UserController {
     public static void createOrder(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
 			User user = context.sessionAttribute("currentUser");
+			String names = context.formParam("names-json");
 			int userId = user.getId();
 			String jsonCookie = context.cookie("flight");
 			context.removeCookie("flight");
-			reservationService.createReservation(userId, jsonCookie);
+			reservationService.createReservation(userId, jsonCookie, names);
 			context.redirect("/");
 		} else {
     		//Redirect to login if the user isn't logged in

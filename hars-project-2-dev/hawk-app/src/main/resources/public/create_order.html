@@ -12,107 +12,67 @@
 			<input type="text" />
 			<input type="number" />
 			<input type="password" />
-			<button type="submit" id="button">Confirm Order</button>
+			<input type="hidden" name="names-json" id="names-json" />
 		</form>
 		
 		<script>
+			var form = document.getElementById("form");
 			var button = document.getElementById("button");
 			var cookieValue = document.cookie
 							  .split('=')[1];
 			var flight_search_offer = JSON.parse(cookieValue);
 			flight_search_offer.disablePricing = true;
 			flight_search_offer.paymentCardRequired = false;
-			var flight_create_order = {
-				"data": {
-					"type": "flight-order",
-					"flightOffers": [flight_search_offer],
-					"travelers": [
-      {
-        "id": "1",
-        "dateOfBirth": "1982-01-16",
-        "name": {
-          "firstName": "JORGrE",
-          "lastName": "GONZALES"
-        },
-        "gender": "MALE",
-        "contact": {
-          "emailAddress": "jorge.gonzales833@telefonica.es",
-          "phones": [
-            {
-              "deviceType": "MOBILE",
-              "countryCallingCode": "34",
-              "number": "480080076"
-            }
-          ]
-        },
-        "documents": [
-          {
-            "documentType": "PASSPORT",
-            "birthPlace": "Madrid",
-            "issuanceLocation": "Madrid",
-            "issuanceDate": "2015-04-14",
-            "number": "00000000",
-            "expiryDate": "2025-04-14",
-            "issuanceCountry": "ES",
-            "validityCountry": "ES",
-            "nationality": "ES",
-            "holder": true
-          }
-        ]
-      }
-      ],
-      		"remarks": {
-				      "general": [
-				        {
-				          "subType": "GENERAL_MISCELLANEOUS",
-				          "text": "ONLINE BOOKING FROM INCREDIBLE VALUES"
-				        }
-				      ],
-				      "airline": [
-				      	{
-							"subType": "OTHER_SERVICE_INFORMATION",
-							"airlineCode": `${flight_search_offer.itineraries[0].segments[0].carrierCode}`,
-				          "text": "TEXT"
-						}
-				      ]
-				    }
+			
+			function inputPassengerNames() {
+				var form = document.getElementById("form");
+				var button = document.createElement("button");
+				button.setAttribute("type", "submit");
+				button.innerText = "Confirm Order";
+				var pricings = flight_search_offer.travelerPricings;
+				for (let i = 0; i < pricings.length; i++) {
+					var firstNameInput = document.createElement("input");
+					firstNameInput.setAttribute("type", "text");
+					firstNameInput.setAttribute("placeholder", `Passenger ${i+1} First Name`);
+					firstNameInput.setAttribute("name", `passenger-${i}-first-name`);
+					firstNameInput.setAttribute("id", `passenger-${i}-first-name`);
+					firstNameInput.className = "name";
+					var lastNameInput = document.createElement("input");
+					lastNameInput.setAttribute("type", "text");
+					lastNameInput.setAttribute("placeholder", `Passenger ${i+1} Last Name`);
+					lastNameInput.setAttribute("name", `passenger-${i}-last-name`);
+					lastNameInput.setAttribute("id", `passenger-${i}-last-name`);
+					lastNameInput.className = "name";
+					form.appendChild(firstNameInput);
+					form.appendChild(lastNameInput);
 				}
-			};
-			console.log(flight_create_order);
-			async function CreateOrder() {
-				var request_access = await RequestAccessToken();
-				
-				var url = "https://test.api.amadeus.com/v1/booking/flight-orders";
-				var access_token = request_access.access_token;
-				var response = await fetch(url, {
-					method: 'POST', 
-					headers: {
-						'Authorization': 'Bearer ' + access_token,
-						'Content-Type': 'application/json'
-					}, 
-					body: JSON.stringify(flight_create_order)
-				});
-				var json = await response.json();
-				console.log(json);
-				document.getElementById("form").innerText = JSON.stringify(json);
+				form.appendChild(button);
 			}
 			
-			async function RequestAccessToken() {
-				var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
-				    method: 'POST',
-				    body: new URLSearchParams({
-				        'grant_type': 'client_credentials',
-				        'client_id': 'OGORt5hAGLuW5GzewaxGCPFVNrKiB0WV',
-				        'client_secret': 'ik6GIT6Y7ui09KcA'
-				    })
-				});
-				var access_json = await request_access.json();
-				return access_json;
+			window.onload = function () {
+				inputPassengerNames();
 			}
 			
-			form.onsubmit = function() {
+			form.onsubmit = function () {
+				var kvpairs = [];
+                for ( var i = 0; i < form.elements.length; i++ ) {
+                   var e = form.elements[i];
+                   if (e.className==="name") {
+		             	kvpairs.push(encodeURIComponent(e.name) + "=" + encodeURIComponent(e.value));
+		           	}
+		       	}
+		       	var names = {
+					"passengers": []
+				};
+				for (var i = 0; i < parseInt(kvpairs.length/2); i++) {
+					var bothNames = {
+						"firstName" : `${kvpairs[2*i].split("=")[1]}`,
+						"lastName" : `${kvpairs[2*i + 1].split("=")[1]}`
+					};
+					names.passengers.push(bothNames);
+				}
+				document.getElementById("names-json").setAttribute("value", JSON.stringify(names));
 				document.cookie = "flight=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ SameSite=None; Secure;";
-		//		CreateOrder();
 			}
 			
 		</script>

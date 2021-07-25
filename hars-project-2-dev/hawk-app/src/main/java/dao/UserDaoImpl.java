@@ -14,6 +14,37 @@ import models.User;
 
 public class UserDaoImpl implements UserDao{
 
+//	public UserDaoImpl() {
+//		
+//	}
+	
+	public String getOne() {
+		// TODO Auto-generated method stub
+		
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet set = null;
+		
+		try {
+			conn = ConnectionUtil.getConnection();
+			
+			final String SQL = "select * from users";
+			stmt = conn.createStatement();
+			
+			set = stmt.executeQuery(SQL);
+			
+			System.out.println(set);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ResourceClosers.closeConnection(conn);
+			ResourceClosers.closeStatement(stmt);
+			ResourceClosers.closeResultSet(set);
+		}
+		System.out.println("LOL");
+		return "working";
+	}
+
 	@Override
 	public Map<Integer, User> getAllUsers() {
 		HashMap<Integer, User> users = new HashMap<>();
@@ -62,6 +93,76 @@ public class UserDaoImpl implements UserDao{
 		return users;
 	}
 
+	public Map<Integer, User> checkUser(User user){
+		System.out.println("Goes through the DAO IMPL");
+		// Create a Map that stores the retrieved user
+		HashMap<Integer, User> oneUser = new HashMap<>();
+		// Initialize the connection, statement, and the result set
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet set = null;
+
+		try {
+			conn = ConnectionUtil.getConnection();
+			final String SQL = "select * from users where user_email = ? and user_password = ?";
+
+			stmt = conn.prepareStatement(SQL); // Prepare statement
+
+			stmt.setString(1, user.getEmail());
+			stmt.setString(2, user.getPassword());
+
+			set = stmt.executeQuery(); // Execute sql
+
+			while(set.next()) {
+				User retrievedUser = new User(set.getInt(1), set.getString(2), set.getString(3),
+						set.getString(4), set.getString(5));
+				// put(key, value) - the key is the user_id and the value is the whole row
+				oneUser.put(set.getInt(1), retrievedUser);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			//Remember to close your connection and release all of your JDBC resources.
+			ResourceClosers.closeConnection(conn);
+			ResourceClosers.closeStatement(stmt);
+			ResourceClosers.closeResultSet(set);
+		}
+
+		return oneUser;
+	}
+
+	public void createUser(User user){
+		Connection conn = null;
+		PreparedStatement stmt = null;
+
+		try {
+			//Establish the connection to the DB
+			conn = ConnectionUtil.getConnection();
+			final String SQL = "insert into users values(default, ?, ?, ?, ?)";
+
+			stmt = conn.prepareStatement(SQL);
+
+			//Since the SQL statement is parameterized, I need to set the values of
+			//the parameters.
+			stmt.setString(1, user.getFirstName());
+			stmt.setString(2, user.getLastName());
+			stmt.setString(3, user.getEmail());
+			stmt.setString(4, user.getPassword());
+
+			//And of course, execute the SQL statement once you have set your parameters.
+			stmt.execute();
+
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ResourceClosers.closeConnection(conn);
+			ResourceClosers.closeStatement(stmt);
+		}
+
+	}
+
 	public void registerUser(String firstName, String lastName, String email, String password){
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -94,7 +195,7 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public User userLogin(String email, String password) throws IllegalArgumentException {
-		User oneUser = null; // Store the user created
+		User oneUser = null;
 		// Initialize the connection, statement, and the result set
 		Connection conn = null;
 		PreparedStatement stmt = null;
