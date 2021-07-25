@@ -1,33 +1,41 @@
-			/* Raymond's Code */
+			
+			/* Raymond's Code */			
+			let form = document.getElementById("form");
+			
 			let spanFlights = document.getElementById("spanFlights");
+			
 			let backBtn = document.getElementById("backBtn");
 			backBtn.addEventListener("click", function() {
 				history.back();
 			});
 			
-			/* Ashar's Code */
 			
-			var body = document.getElementById("ok");
-			var form = document.getElementById("form");
-			var button = document.getElementById("button");
-			console.log(document.cookie);
-			var cookieValueFlight = document.cookie
-							  .split('; ')
-							  .find(row => row.startsWith('flight='))
-							  .split('=')[1];
-			var flight_search_offer = JSON.parse(cookieValueFlight);
-			console.log(flight_search_offer);
-			flight_search_offer.disablePricing = true;
-			flight_search_offer.paymentCardRequired = false;
-			var flight_price_offer = {
-				"data": {
-					"type": "flight-offers-pricing",
-					"flightOffers": [flight_search_offer]
-				}
-			};
-			/* Raymond's Code */
-			function createCard() {
-			let div1 = document.createElement("div");
+			/* Ashar's Code */
+			// var form = document.getElementById("form");
+			var ol = document.getElementById("ol");
+			var flights = null;
+			
+			//search-results?originLocationCode=IAH&destinationLocationCode=JFK&departureDate=2021-11-01&adults=1&travelClass=ECONOMY&nonStop=true&maxPrice=250
+			//search-results?originLocationCode=TPA&destinationLocationCode=LAX&departureDate=2021-07-27&returnDate=&adults=1&nonStop=true&travelClass=ECONOMY&maxPrice=500
+
+			async function search_results(query_string) {
+				var request_access = await RequestAccessToken();
+				
+				var url = "https://test.api.amadeus.com/v2/shopping/flight-offers" + query_string + "&max=10"; //
+				var access_token = request_access.access_token;
+				var response = await fetch(url, {
+					method: 'GET', 
+					headers: {
+						'Authorization': 'Bearer ' + access_token
+					}
+				});
+				var json = await response.json();
+				flights = json.data;
+				var urlParams = new URLSearchParams(window.location.search);
+				console.log(flights);
+				for (let index in flights) {
+					
+					let div1 = document.createElement("div");
 					div1.classList.add("card")
 					div1.classList.add("text-center")
 					div1.classList.add("resultCards")
@@ -37,8 +45,17 @@
 					
 					let cardHeader = document.createElement("h4");
 					cardHeader.classList.add("cardHeader");
-					cardHeader.innerHTML = "Flight Order Overview";
+					cardHeader.innerHTML = "Flight Details";
 					
+					let radio = document.createElement("input");
+					radio.classList.add("form-check-input");
+					radio.classList.add("flightRadio");
+					radio.setAttribute("type", "radio");
+					radio.setAttribute("type", "radio");
+					radio.setAttribute("name", "flightSelection");
+					radio.setAttribute("value", index);
+					
+					cardHeader.appendChild(radio);
 					div2.appendChild(cardHeader);
 					div1.appendChild(div2);
 					
@@ -46,8 +63,8 @@
 					let div3 = document.createElement("div");
 					div3.classList.add("card-body");
 					
-					let grand_total = flight_search_offer.price.grandTotal;
-					let itineraries = flight_search_offer.itineraries;
+					let grand_total = flights[index].price.grandTotal;
+					let itineraries = flights[index].itineraries;
 					
 					for (let itinerary_index in itineraries) {
 						let segments = itineraries[itinerary_index].segments;
@@ -66,11 +83,11 @@
 						for (let segment_index in segments) {
 							let carrier = segments[segment_index].carrierCode;
 							let number = segments[segment_index].number;
+							let duration = segments[segment_index].duration;
 							let departure_time = segments[segment_index].departure.at;
 							let departure_iata = segments[segment_index].departure.iataCode;
 							let arrival_time = segments[segment_index].arrival.at;
 							let arrival_iata = segments[segment_index].arrival.iataCode;
-							let duration = segments[segment_index].duration;
 							
 							// Duration Converted
 							let newDuration = duration.slice(2);
@@ -114,7 +131,6 @@
 							let arriveMilitaryTime = arrival_time.substring(arriveTimeIdx + 1);
 							let newArrive = convertTime(arriveMilitaryTime, arriveDate);
 							
-
 							let div4 = document.createElement("div");
 							div4.classList.add("departingDiv");
 							
@@ -195,106 +211,7 @@
 						div1.appendChild(div3);
 						spanFlights.appendChild(div1);	
 				}
-				
-			/* Ashar's Code */
-			async function FlightOffersPrice() {
-				var request_access = await RequestAccessToken();
-				
-				var url = "https://test.api.amadeus.com/v1/shopping/flight-offers/pricing?forceClass=false";
-				var access_token = request_access.access_token;
-				var response = await fetch(url, {
-					method: 'POST', 
-					headers: {
-						'Authorization': 'Bearer ' + access_token,
-						'Content-Type': 'application/json'
-					}, 
-					body: JSON.stringify(flight_price_offer)
-				});
-				var json = await response.json();
-				console.log(json);
 			}
-			
-			/* Ashar's Code Dynamic Code for Passangers*/
-			let cookieValue = document.cookie
-							  .split('=')[1];
-			let flight_search_offer2 = JSON.parse(cookieValue);
-			flight_search_offer2.disablePricing = true;
-			flight_search_offer2.paymentCardRequired = false;
-			
-			function inputPassengerNames() {
-				let pricings = flight_search_offer2.travelerPricings;
-				for (let i = 0; i < pricings.length; i++) {
-					let cardDiv1 = document.createElement("div");
-					cardDiv1.classList.add("card");
-					cardDiv1.classList.add("border-primary");
-					cardDiv1.classList.add("mb-3");
-					
-					let cardDiv2 = document.createElement("div");
-					cardDiv2.classList.add("card-header");
-					cardDiv2.innerHTML = `Passenger ${i} Name`;
-					cardDiv1.appendChild(cardDiv2);
-					
-					let cardDiv3 = document.createElement("div");
-					cardDiv3.classList.add("card-body");
-					cardDiv3.classList.add("input-group");
-					cardDiv3.classList.add("input-group-lg");
-					cardDiv1.appendChild(cardDiv3);
-					
-					let firstNameInput = document.createElement("input");
-					firstNameInput.classList.add("form-control");
-					firstNameInput.setAttribute("type", "text");
-					firstNameInput.setAttribute("placeholder", `Passenger ${i+1} First Name`);
-					firstNameInput.setAttribute("name", `passenger-${i}-first-name`);
-					firstNameInput.setAttribute("id", `passenger-${i}-first-name`);
-					firstNameInput.className = "name";
-					let lastNameInput = document.createElement("input");
-					lastNameInput.classList.add("form-control");
-					lastNameInput.setAttribute("type", "text");
-					lastNameInput.setAttribute("placeholder", `Passenger ${i+1} Last Name`);
-					lastNameInput.setAttribute("name", `passenger-${i}-last-name`);
-					lastNameInput.setAttribute("id", `passenger-${i}-last-name`);
-					lastNameInput.className = "name";
-					/* form.appendChild(firstNameInput);
-					form.appendChild(lastNameInput); */
-					cardDiv3.appendChild(firstNameInput);
-					cardDiv3.appendChild(lastNameInput);
-					let span = document.getElementById("passengers");
-					span.appendChild(cardDiv1);
-				}
-			}
-			
-			form.onsubmit = function () {
-				var kvpairs = [];
-                for ( var i = 0; i < form.elements.length; i++ ) {
-                   var e = form.elements[i];
-                   if (e.className==="name") {
-		             	kvpairs.push(encodeURIComponent(e.name) + "=" + encodeURIComponent(e.value));
-		           	}
-		       	}
-		       	var names = {
-					"passengers": [],
-					"luggage": "",
-					"cabin":""
-				};
-				for (var i = 0; i < parseInt(kvpairs.length/2); i++) {
-					var bothNames = {
-						"firstName" : `${kvpairs[2*i].split("=")[1]}`,
-						"lastName" : `${kvpairs[2*i + 1].split("=")[1]}`
-					};
-					names.passengers.push(bothNames);
-				}
-				var value = document.querySelector('input[name="luggage"]:checked').value;
-				names.luggage = value;
-				var cabin = flight_search_offer2.travelerPricings[0].fareDetailsBySegment[0].cabin;
-				names.cabin = cabin;
-				document.getElementById("names-json").setAttribute("value", JSON.stringify(names));
-				document.cookie = "flight=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ SameSite=None; Secure;";
-			}
-			
-			
-			
-			
-			
 			
 			async function RequestAccessToken() {
 				var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
@@ -309,7 +226,13 @@
 				return access_json;
 			}
 			
-			window.onload = function() {
-				createCard();
-				inputPassengerNames();
-			};
+			window.onload = function () {
+				var query_string = window.location.search;
+				search_results(query_string);
+			}
+			
+			form.onsubmit = function () {
+				var value = document.querySelector('input[name="flightSelection"]:checked').value;
+				var JSON_string = JSON.stringify(flights[value]);
+				document.cookie = `flight=${JSON_string}; SameSite=None; Secure`;
+			}

@@ -11,11 +11,11 @@
 			var form = document.getElementById("form");
 			var button = document.getElementById("button");
 			console.log(document.cookie);
-			var cookieValueFlight = document.cookie
+			var cookieValue = document.cookie
 							  .split('; ')
 							  .find(row => row.startsWith('flight='))
 							  .split('=')[1];
-			var flight_search_offer = JSON.parse(cookieValueFlight);
+			var flight_search_offer = JSON.parse(cookieValue);
 			console.log(flight_search_offer);
 			flight_search_offer.disablePricing = true;
 			flight_search_offer.paymentCardRequired = false;
@@ -195,7 +195,6 @@
 						div1.appendChild(div3);
 						spanFlights.appendChild(div1);	
 				}
-				
 			/* Ashar's Code */
 			async function FlightOffersPrice() {
 				var request_access = await RequestAccessToken();
@@ -214,88 +213,6 @@
 				console.log(json);
 			}
 			
-			/* Ashar's Code Dynamic Code for Passangers*/
-			let cookieValue = document.cookie
-							  .split('=')[1];
-			let flight_search_offer2 = JSON.parse(cookieValue);
-			flight_search_offer2.disablePricing = true;
-			flight_search_offer2.paymentCardRequired = false;
-			
-			function inputPassengerNames() {
-				let pricings = flight_search_offer2.travelerPricings;
-				for (let i = 0; i < pricings.length; i++) {
-					let cardDiv1 = document.createElement("div");
-					cardDiv1.classList.add("card");
-					cardDiv1.classList.add("border-primary");
-					cardDiv1.classList.add("mb-3");
-					
-					let cardDiv2 = document.createElement("div");
-					cardDiv2.classList.add("card-header");
-					cardDiv2.innerHTML = `Passenger ${i} Name`;
-					cardDiv1.appendChild(cardDiv2);
-					
-					let cardDiv3 = document.createElement("div");
-					cardDiv3.classList.add("card-body");
-					cardDiv3.classList.add("input-group");
-					cardDiv3.classList.add("input-group-lg");
-					cardDiv1.appendChild(cardDiv3);
-					
-					let firstNameInput = document.createElement("input");
-					firstNameInput.classList.add("form-control");
-					firstNameInput.setAttribute("type", "text");
-					firstNameInput.setAttribute("placeholder", `Passenger ${i+1} First Name`);
-					firstNameInput.setAttribute("name", `passenger-${i}-first-name`);
-					firstNameInput.setAttribute("id", `passenger-${i}-first-name`);
-					firstNameInput.className = "name";
-					let lastNameInput = document.createElement("input");
-					lastNameInput.classList.add("form-control");
-					lastNameInput.setAttribute("type", "text");
-					lastNameInput.setAttribute("placeholder", `Passenger ${i+1} Last Name`);
-					lastNameInput.setAttribute("name", `passenger-${i}-last-name`);
-					lastNameInput.setAttribute("id", `passenger-${i}-last-name`);
-					lastNameInput.className = "name";
-					/* form.appendChild(firstNameInput);
-					form.appendChild(lastNameInput); */
-					cardDiv3.appendChild(firstNameInput);
-					cardDiv3.appendChild(lastNameInput);
-					let span = document.getElementById("passengers");
-					span.appendChild(cardDiv1);
-				}
-			}
-			
-			form.onsubmit = function () {
-				var kvpairs = [];
-                for ( var i = 0; i < form.elements.length; i++ ) {
-                   var e = form.elements[i];
-                   if (e.className==="name") {
-		             	kvpairs.push(encodeURIComponent(e.name) + "=" + encodeURIComponent(e.value));
-		           	}
-		       	}
-		       	var names = {
-					"passengers": [],
-					"luggage": "",
-					"cabin":""
-				};
-				for (var i = 0; i < parseInt(kvpairs.length/2); i++) {
-					var bothNames = {
-						"firstName" : `${kvpairs[2*i].split("=")[1]}`,
-						"lastName" : `${kvpairs[2*i + 1].split("=")[1]}`
-					};
-					names.passengers.push(bothNames);
-				}
-				var value = document.querySelector('input[name="luggage"]:checked').value;
-				names.luggage = value;
-				var cabin = flight_search_offer2.travelerPricings[0].fareDetailsBySegment[0].cabin;
-				names.cabin = cabin;
-				document.getElementById("names-json").setAttribute("value", JSON.stringify(names));
-				document.cookie = "flight=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ SameSite=None; Secure;";
-			}
-			
-			
-			
-			
-			
-			
 			async function RequestAccessToken() {
 				var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
 				    method: 'POST',
@@ -311,5 +228,4 @@
 			
 			window.onload = function() {
 				createCard();
-				inputPassengerNames();
 			};
