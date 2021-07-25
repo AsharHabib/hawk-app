@@ -26,14 +26,14 @@ public class TravellersServiceTest {
         travellersServiceImpl = new TravellersServiceImpl();
         MockitoAnnotations.openMocks(this);
         dummyTravellers = new ArrayList<>();
-        dummyTravellers.add(new Traveller(1,3,"13G","",
-                "2011-01-01 00:00:00","UA",1738));
-        dummyTravellers.add(new Traveller(2,3,"14G","",
-                "2011-01-01 00:00:00","UA",1738));
-        dummyTravellers.add(new Traveller(3,3,"15G","",
-                "2011-01-01 00:00:00","UA",420));
-        dummyTravellers.add(new Traveller(4,3,"16G","",
-                "2011-01-01 00:00:00","UA",420));
+        dummyTravellers.add(new Traveller(1,3,"13G","XL",
+                "ECONOMY","2011-01-01 00:00:00","UA",1738));
+        dummyTravellers.add(new Traveller(2,3,"14G","XL",
+                "ECONOMY","2011-01-01 00:00:00","UA",1738));
+        dummyTravellers.add(new Traveller(3,3,"15G","XL",
+                "ECONOMY","2011-01-01 00:00:00","UA",420));
+        dummyTravellers.add(new Traveller(4,3,"16G","XL",
+                "ECONOMY","2011-01-01 00:00:00","UA",420));
         int mockReservationId = 3;
         Mockito.when(travellersDaoImpl.getAllSeats(mockReservationId)).thenReturn(dummyTravellers);
     }
