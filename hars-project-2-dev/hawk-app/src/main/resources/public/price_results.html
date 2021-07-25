@@ -599,13 +599,11 @@
 					firstNameInput.setAttribute("placeholder", `Passenger ${i+1} First Name`);
 					firstNameInput.setAttribute("name", `passenger-${i}-first-name`);
 					firstNameInput.setAttribute("id", `passenger-${i}-first-name`);
-					firstNameInput.className = "name";
 					let lastNameInput = document.createElement("input");
 					lastNameInput.setAttribute("type", "text");
 					lastNameInput.setAttribute("placeholder", `Passenger ${i+1} Last Name`);
 					lastNameInput.setAttribute("name", `passenger-${i}-last-name`);
 					lastNameInput.setAttribute("id", `passenger-${i}-last-name`);
-					lastNameInput.className = "name";
 					lastNameInput.classList.add("firstAndLast");
 					firstNameInput.classList.add("firstAndLast");
 					firstNameInput.classList.add("form-control");
@@ -614,6 +612,8 @@
 					firstNameHeader.classList.add("col-12");
 					firstNameInput.classList.add("col-12");
 					lastNameInput.classList.add("col-12");
+					firstNameInput.className = "name col-12 form-control firstAndLast";
+					lastNameInput.className = "name col-12 form-control firstAndLast";
 					/* form.appendChild(firstNameInput);
 					form.appendChild(lastNameInput); */
 					inputDiv.appendChild(firstNameHeader);
@@ -630,7 +630,7 @@
 				var kvpairs = [];
                 for ( var i = 0; i < form.elements.length; i++ ) {
                    var e = form.elements[i];
-                   if (e.className==="name") {
+                   if (e.className==="name col-12 form-control firstAndLast") {
 		             	kvpairs.push(encodeURIComponent(e.name) + "=" + encodeURIComponent(e.value));
 		           	}
 		       	}
