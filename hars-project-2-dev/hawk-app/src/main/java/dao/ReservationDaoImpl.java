@@ -126,9 +126,15 @@ public class ReservationDaoImpl implements ReservationDao {
 	public void deleteReservation(int reservationId) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		PreparedStatement cascadeDeleteStmt = null;
 		
 		try {
 			conn = ConnectionUtil.getConnection();
+			final String cascadeDelete = "delete from travellers where traveller_reservation_id = ?";
+			cascadeDeleteStmt = conn.prepareStatement(cascadeDelete);
+			cascadeDeleteStmt.setInt(1, reservationId);
+			cascadeDeleteStmt.execute();
+			
 			final String SQL = "delete from reservations where reservation_id = ?";
 			stmt = conn.prepareStatement(SQL);
 			

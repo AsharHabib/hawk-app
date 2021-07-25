@@ -4,27 +4,26 @@
 	 	<meta charset="UTF-8">
 		<title>Dashboard</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-<<<<<<< HEAD
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 		<style>
 			img{
 				height: 40px;
 			}
-
+			
 			li.nav-item{
 			    padding: 0 1em;
 			    font-size: large;
 			}
-
+			
 			li.logout{
 			    position: absolute;
 			    right: 0;
 			}
-
+			
 			.hidden{
 			    display: none;
 			}
-
+			
 			footer{
 			    position: absolute;
 			    bottom: 0;
@@ -59,10 +58,10 @@
 		<button id="show_all" disabled>Show all reservations</button>
 		<ol id="ol"></ol>
 		<script>
-
+			
 			var section = document.getElementById("main-section");
 			var ol = document.getElementById("ol");
-
+			
 			async function reservations() {
 			    var request_access = await RequestAccessToken();
 			    var access_token = request_access.access_token;
@@ -81,7 +80,7 @@
 						hide_buttons[k].removeAttribute("disabled")
 					}
 				});
-
+			    
 			    for (let i = 0; i < json.length; i++) {
 			        var reservation_id = JSON.parse(json[i].id);
 			        var reservation = JSON.parse(json[i].reservationJSON);
@@ -93,7 +92,7 @@
 			            li.innerText = `Passenger ${k+1} is ${passengers[k].firstName} ${passengers[k].lastName}`;
 			            ul.appendChild(li);
 			        }
-
+			        
 			        var li = document.createElement("li");
 			        li.className = "number";
 			        var itineraries = reservation.itineraries;
@@ -117,7 +116,7 @@
 			        li.appendChild(h3);
 			        li.appendChild(a);
 			        li.appendChild(form);
-
+			        
 			        var hide_button = document.createElement("button");
 		            hide_button.setAttribute('class', 'hide_others');
 		            hide_button.addEventListener("click", ()=>{
@@ -155,10 +154,10 @@
 			                var duration_minutes = duration.split("H")[1].split("M")[0];
 			                var departure_time = segments[segment_index].departure.at;
 			                var departure_date = departure_time.split("T")[0];
-
+			                
 			                var url = `https://test.api.amadeus.com/v2/schedule/flights?carrierCode=${carrier}&flightNumber=${number}&scheduledDepartureDate=${departure_date}`;
 			                var response = await fetch(url, {
-			                    method: 'GET',
+			                    method: 'GET', 
 			                    headers: {
 			                        'Authorization': 'Bearer ' + access_token
 			                    }
@@ -175,7 +174,7 @@
 								departure_status = status_data.flightPoints[0].departure.timings[0].hasOwnProperty("delays") ? "DELAYED" : "ON TIME";
 								arrival_status = status_data.flightPoints[1].arrival.timings[0].hasOwnProperty("delays") ? "DELAYED" : "ON TIME";
 							}
-
+			
 			                var departure_iata = segments[segment_index].departure.iataCode;
 			                var arrival_time = segments[segment_index].arrival.at;
 			                var arrival_iata = segments[segment_index].arrival.iataCode;
@@ -205,7 +204,7 @@
 			        ol.appendChild(li).setAttribute("number", i.toString());
 			    }
 			}
-
+			
 			async function RequestAccessToken() {
 			    var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
 			        method: 'POST',
@@ -218,7 +217,7 @@
 			    var access_json = await request_access.json();
 			    return access_json;
 			}
-
+			
 			function format(inputDate) {
 			    var date = new Date(inputDate);
 			    if (!isNaN(date.getTime())) {
@@ -226,7 +225,7 @@
 			        return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
 			    }
 			}
-
+			
 			function convertTime(time, date) {
                 time = time.split(':');
                 let hours = Number(time[0]);
@@ -234,7 +233,7 @@
                 let seconds = Number(time[2]);
                 // calculate
                 let timeValue;
-
+                
                 if (hours > 0 && hours <= 12) {
                   timeValue= "" + hours;
                 } else if (hours > 12) {
@@ -243,12 +242,12 @@
                   timeValue= "12";
                 }
                 timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
-                timeValue += (hours >= 12) ? " P.M." : " A.M.";
+                timeValue += (hours >= 12) ? " P.M." : " A.M."; 
                 date = format(date);
-                let newTime = date + " at " + timeValue;
+                let newTime = date + " at " + timeValue;    
                 return newTime;
             }
-
+			
 			function hide_button(){
 			    document.querySelectorAll('button').forEach((single_button) => {
 			        single_button.addEventListener('click', () => {
@@ -261,7 +260,7 @@
 			        })
 			    })
 			}
-
+			
 			function reveal_button(){
 			    document.getElementById('show_all').addEventListener('click', () => {
 			        document.querySelectorAll(`[number]`).forEach((reservation) => {
@@ -272,42 +271,11 @@
 			        })
 			    })
 			}
-
+			
 			window.onload = function() {
 			    reservations();
 			}
-
+		
 		</script>
-=======
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" href="/styles/dashboard_current_style.css">
-	</head>
-	<body>
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #044ea0;">
-		    <div class="container-fluid">
-		        <a class="navbar-brand" href="/dashboard"><img src="/api/logo_no_bg.png" alt="hars_logo"></a>
-		        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		            <span class="navbar-toggler-icon"></span>
-		        </button>
-		        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-		            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-		                <li class="nav-item">
-		                    <a class="nav-link active" aria-current="page" href="/api/dashboard">Current Bookings</a>
-		                </li>
-		                <li class="nav-item">
-		                    <a class="nav-link active" aria-current="page" href="/api/airports">Book New Trip</a>
-		                </li>
-		                <li class="nav-item logout">
-		                    <a class="nav-link active" aria-current="page" href="/api/logout">Logout</a>
-		                </li>
-		            </ul>
-		        </div>
-		    </div>
-		</nav>
-		<section id="main-section"></section>
-        <button id="show_all" disabled="true">Show All Reservations</button>
-		<ol id="ol"></ol>
-		<script src="/scripts/dashboard_current.js"></script>
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
 	</body>
 </html>

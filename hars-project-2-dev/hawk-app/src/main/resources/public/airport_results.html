@@ -114,36 +114,6 @@
 
 	</head>
 	<body>
-<<<<<<< HEAD
-		<h1 id="ok">Search Parameters</h1>
-		<form id="form" method="GET" action="/api/search-results">
-			<ol id="ol-current"></ol>
-			<ol id="ol-destination"></ol>
-			<label for="departureDate">Departure Date</label>
-			<input type="date" id="departureDate" name="departureDate"/>
-			<label for="returnDate">Return Date</label>
-			<input type="date" id="returnDate" name="returnDate" />
-			<label for="adults">Number of Passengers:</label>
-			<input type="number" id="adults" name="adults" min="1" />
-			<label for="travelClass">Class</label>
-			<select id="travelClass" name="travelClass">
-				<option value="ECONOMY">Economy</option>
-				<option value="PREMIUM_ECONOMY">Premium Economy</option>
-				<option value="BUSINESS">Business</option>
-				<option value="FIRST">First</option>
-			</select>
-			<label for="nonStop">Non-Stop?</label>
-			<input type="radio" id="nonStop" name="nonStop" value="true" />
-			<label for="connected">Connected?</label>
-			<input type="radio" id="connected" name="nonStop" value="false" />
-			<label for="maxPrice">Max Price</label>
-			<input type="number" id="maxPrice" name="maxPrice" min="1" />
-			<button type="submit" id="button">Search for flights!</button>
-		</form>
-		<script>
-			//Get the specific URL query parameters
-			var urlParams = new URLSearchParams(window.location.search);
-=======
 	<!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #044ea0;">
             <div class="container-fluid">
@@ -354,7 +324,6 @@
 			// Ashar's Code
 			var urlParams = new URLSearchParams(window.location.search);
 			/*var latitude_query = urlParams.get('latitude');*/
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
 			var departureCity = urlParams.get('departureCity');
 			var departureState = urlParams.get('departureState');
 			/*var longitude_query = urlParams.get('longitude');*/
@@ -369,7 +338,6 @@
 			var button = document.getElementById("button");
 			var modal = document.getElementById("myModal");
 			
-			//Async function for Google's Geocoding API, to convert City, State to Latitude + Longitude
 			async function latLongGoogleAPI(city, state) {
 				var url = `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+${state}&key=` + "AIzaSyD7MGumrOiKucDKRyuT_KJe1YsbZrMMcdw";
 				var response = await fetch(url);
@@ -380,21 +348,12 @@
 			
 			
 			var airports = null;
-<<<<<<< HEAD
-			//Async function to fetch from the Amadeus Airports Nearest Relevant API, calls both other async functions, current Boolean value to distinguish between departure and arrival
-			async function AirportsNearest(city_query, state_query, radius, current=true) {
-				var request_access = await RequestAccessToken();
-				var latLong = await latLongGoogleAPI(city_query, state_query);
-				var latitude = latLong.results[0].geometry.location.lat;
-				var longitude = latLong.results[0].geometry.location.lng;
-=======
 			async function AirportsNearest(city_query, state_query, radius_query, current=true) {
 				var request_access = await RequestAccessToken();
 				var latLong = await latLongGoogleAPI(city_query, state_query);
 				var latitude_query = latLong.results[0].geometry.location.lat;
 				var longitude_query = latLong.results[0].geometry.location.lng;
 
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
 				
 				var url = "https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=" + latitude_query + "&longitude=" + longitude_query + "&radius=" + radius_query;
 				var access_token = request_access.access_token;
@@ -406,24 +365,9 @@
 				});
 				var json = await response.json();
 				airports = json.data;
-				//If this is the departure's local airports, have them appear under the Departure part, with radio buttons as inputs
+				console.log(airports);
 				if (current) {
 					for (let index in airports) {
-<<<<<<< HEAD
-						var li = document.createElement("li");
-						var radio = document.createElement("input");
-						var label = document.createElement("label");
-						li.innerText = `${airports[index].name}, ${airports[index].distance.value} away`;
-						label.innerText = "Choose your takeoff airport";
-						radio.setAttribute("type", "radio");
-						radio.setAttribute("name", "originLocationCode");
-						radio.setAttribute("id", `${airports[index].iataCode}`);
-						radio.setAttribute("value", `${airports[index].iataCode}`);
-						label.setAttribute("for", `${airports[index].iataCode}`);
-						li.appendChild(label);
-						li.appendChild(radio);
-						ol_current.appendChild(li);
-=======
 						let option = document.createElement("option");
 						//option.setAttribute("name", "originLocationCode");
 						option.setAttribute("id", `${airports[index].iataCode}`);
@@ -431,10 +375,8 @@
 						option.setAttribute("for", `${airports[index].iataCode}`);
 						option.innerHTML = `${airports[index].iataCode}, ${airports[index].address.cityCode}`;
 						fromSelect.appendChild(option);
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
 					}
 				} else {
-				//Else, display them for the arrival airports
 					for (let index in airports) {
 						let option = document.createElement("option");
 						//option.setAttribute("name", "originLocationCode");
@@ -446,7 +388,7 @@
 					}
 				}
 			}
-			//Async function to get the access token needed for the Amadeus API
+			
 			async function RequestAccessToken() {
 				var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
 				    method: 'POST',
@@ -460,34 +402,10 @@
 				return access_json;
 			}
 			
-<<<<<<< HEAD
-			var today = new Date();
-			var dd = today.getDate();
-			var mm = today.getMonth()+1; //January is 0!
-			var yyyy = today.getFullYear();
-			 if(dd<10){
-			        dd='0'+dd
-			    } 
-			    if(mm<10){
-			        mm='0'+mm
-			    } 
-			//Verify that the date inputs are only after the current day, and returnDate is after the departureDate
-			today = yyyy+'-'+mm+'-'+dd;
-			document.getElementById("departureDate").setAttribute("min", today);
-			document.getElementById("returnDate").setAttribute("min", today);
-			document.getElementById("departureDate").addEventListener("change", () => {
-				document.getElementById("returnDate").setAttribute("min", document.getElementById("departureDate").value);
-			});
-			
-			window.onload = function () {
-				AirportsNearest(departureCity, departureState, radius);
-				AirportsNearest(arrivalCity, arrivalState, destinationRadius, false);
-=======
 			window.onload = function () {
 				AirportsNearest(departureCity, departureState, radius_query);
 				AirportsNearest(arrivalCity, arrivalState, destination_radius_query, false);
 
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
 			}
 		</script>
 	</body>

@@ -62,25 +62,18 @@ public class UserController {
 			context.redirect("/");
 		}
     }
-    
     public static void registerUser(Context context){
         userService.registerUser(context.formParam("firstName"),
                 context.formParam("lastName"),
                 context.formParam("email"),
                 context.formParam("password"));
-        context.render("public/dashboard.html");
+        context.render("public/index.html");
     }
-    public static void registerUserPage(Context context) {
-    	context.render("public/new_user.html");
-    }
-<<<<<<< HEAD
     /**
      * Method to render the default page
      * If a user is not logged in (sessionAttribute "currentUser" doesn't exist), render the page
      * Else redirect the user to the dashboard page
      * */
-=======
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
     public static void defaultPage(Context context){
         if (context.sessionAttribute("currentUser") == null) {
 			context.render("public/login.html");
@@ -100,39 +93,11 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-<<<<<<< HEAD
     /**
      * Method to render the index page
      * If a user is logged in (sessionAttribute "currentUser" exists), render the index page
      * Else redirect the user to the login page
      * */
-=======
-    
-    public static void userDashboardFlightStatus(Context context) {
-    	if (context.sessionAttribute("currentUser") != null) {
-    		context.render("public/dashboard_flight_statuses.html");
-    	} else {
-    		context.redirect("/");
-    	}
-    }
-    
-    public static void userPrevious(Context context) {
-    	if (context.sessionAttribute("currentUser") != null) {
-    		context.render("public/dashboard_previous.html");
-    	} else {
-    		context.redirect("/");
-    	}
-    }
-    
-    public static void userFlight(Context context) {
-    	if (context.sessionAttribute("currentUser") != null) {
-    		context.render("public/dashboard_flightstatus.html");
-    	} else {
-    		context.redirect("/");
-    	}
-    }
-    
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
     public static void airportsNearest(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
     		User user = context.sessionAttribute("currentUser");

@@ -241,12 +241,8 @@
 			var flights = null;
 			
 			//search-results?originLocationCode=IAH&destinationLocationCode=JFK&departureDate=2021-11-01&adults=1&travelClass=ECONOMY&nonStop=true&maxPrice=250
-<<<<<<< HEAD
-			//Async function to send a GET request to the Amadeus Flight Offers Search API, and set up the search results on the page
-=======
 			//search-results?originLocationCode=TPA&destinationLocationCode=LAX&departureDate=2021-07-27&returnDate=&adults=1&nonStop=true&travelClass=ECONOMY&maxPrice=500
 
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
 			async function search_results(query_string) {
 				var request_access = await RequestAccessToken();
 				
@@ -260,13 +256,8 @@
 				});
 				var json = await response.json();
 				flights = json.data;
-				console.log(flights);
 				var urlParams = new URLSearchParams(window.location.search);
-<<<<<<< HEAD
-				//Meant to display it as an ol > li > ol > li
-=======
 				console.log(flights);
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
 				for (let index in flights) {
 					
 					let div1 = document.createElement("div");
@@ -446,7 +437,7 @@
 						spanFlights.appendChild(div1);	
 				}
 			}
-			//Async function to get the access token needed for the Amadeus API
+			
 			async function RequestAccessToken() {
 				var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
 				    method: 'POST',
@@ -464,7 +455,7 @@
 				var query_string = window.location.search;
 				search_results(query_string);
 			}
-			//On form submit, create a cookie with the JSON data for the selected flight with the checked radio button
+			
 			form.onsubmit = function () {
 				var value = document.querySelector('input[name="flightSelection"]:checked').value;
 				var JSON_string = JSON.stringify(flights[value]);

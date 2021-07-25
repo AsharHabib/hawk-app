@@ -14,7 +14,6 @@ public class Main {
 		Javalin app = Javalin.create(config -> {
 			config.addStaticFiles("/public");
 		}).start(5000);
-<<<<<<< HEAD
 
 //		app.get("/airport-results", context -> {
 //	    	context.render("./public/airport_results.html");
@@ -27,20 +26,6 @@ public class Main {
 //	    app.get("/price-results", context -> {
 //	    	context.render("./public/price_results.html");
 //	    });
-=======
-		
-		app.get("/airport-results", context -> {
-	    	context.render("./public/airport_results.html");
-	    });
-	    
-	    app.get("/search-results", context -> {
-	    	context.render("./public/search_results.html");
-	    });
-	    
-	    app.get("/price-results", context -> {
-	    	context.render("./public/price_results.html");
-	    });
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
 
 		
 		FrontController fc = new FrontController(app);

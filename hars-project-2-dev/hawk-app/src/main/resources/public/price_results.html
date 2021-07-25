@@ -349,13 +349,13 @@
 			var body = document.getElementById("ok");
 			var form = document.getElementById("form");
 			var button = document.getElementById("button");
-<<<<<<< HEAD
+
 			var cookieValue = document.cookie
 							  .split('; ')
 							  .find(row => row.startsWith('flight='))
 							  .split('=')[1];
 			var flight_search_offer = JSON.parse(cookieValue);
-=======
+
 			console.log(document.cookie);
 			var cookieValueFlight = document.cookie
 							  .split('; ')
@@ -363,7 +363,7 @@
 							  .split('=')[1];
 			var flight_search_offer = JSON.parse(cookieValueFlight);
 			console.log(flight_search_offer);
->>>>>>> 701008def2d6d6185a7cdf79fe7aa4c1b770591d
+
 			flight_search_offer.disablePricing = true;
 			flight_search_offer.paymentCardRequired = false;
 			var flight_price_offer = {
@@ -562,7 +562,7 @@
 			}
 			
 			/* Ashar's Code Dynamic Code for Passangers*/
-			let cookieValue = document.cookie
+			var cookieValue = document.cookie
 							  .split('=')[1];
 			let flight_search_offer2 = JSON.parse(cookieValue);
 			flight_search_offer2.disablePricing = true;
