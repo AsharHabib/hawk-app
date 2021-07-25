@@ -23,6 +23,10 @@ import services.TravellersServiceImpl;
 import services.UserService;
 import services.UserServiceImpl;
 
+/**
+ * UserController class to define the static methods that are called in Dispatcher
+ * Has static field variables for each Service
+ * */
 public class UserController {
     static UserService userService = new UserServiceImpl();
     static ReservationService reservationService = new ReservationServiceImpl();
@@ -42,12 +46,18 @@ public class UserController {
         User user = context.bodyAsClass(User.class);
         context.json(userService.checkUser(user));
     }
+    /**
+     * Method to log a user in
+     * Renders the dashboard page upon successful login
+     * Catches IllegalArgumentException if the user entered invalid credentials
+     * Redirects the user back to the login page
+     * */
     public static void userLogIn(Context context){
         try {
 			User user = userService.userLogIn(context.formParam("email"), context.formParam("password"));
 			context.sessionAttribute("currentUser", user);
 			context.json(user);
-			context.render("public/dashboard.html");
+			context.redirect("/api/dashboard");
 		} catch (IllegalArgumentException e) {
 			context.redirect("/");
 		}
@@ -59,15 +69,23 @@ public class UserController {
                 context.formParam("password"));
         context.render("public/index.html");
     }
-
+    /**
+     * Method to render the default page
+     * If a user is not logged in (sessionAttribute "currentUser" doesn't exist), render the page
+     * Else redirect the user to the dashboard page
+     * */
     public static void defaultPage(Context context){
         if (context.sessionAttribute("currentUser") == null) {
 			context.render("public/login.html");
 		} else {
-			context.redirect("/api/airports");
+			context.redirect("/api/dashboard");
 		}
     }
-    
+    /**
+     * Method to render the dashboard page
+     * If a user is logged in (sessionAttribute "currentUser" exists), render the dashboard page
+     * Else redirect the user to the login page
+     * */
     public static void userDashboard(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
     		context.render("public/dashboard.html");
@@ -75,7 +93,11 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to render the index page
+     * If a user is logged in (sessionAttribute "currentUser" exists), render the index page
+     * Else redirect the user to the login page
+     * */
     public static void airportsNearest(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
     		User user = context.sessionAttribute("currentUser");
@@ -85,7 +107,11 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to render the airport results page
+     * If a user is logged in (sessionAttribute "currentUser" exists), render the airport results page
+     * Else redirect the user to the login page
+     * */
     public static void airportResults(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
     		context.render("public/airport_results.html");
@@ -94,7 +120,13 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to render the search results page
+     * If a user is logged in (sessionAttribute "currentUser" exists), render the search results page
+     * Else redirect the user to the login page
+     * 
+     * Must validate each form parameter, if any parameter is invalid, redirect to the airports page
+     * */
     public static void searchResults(Context context) {
     	// Check the user is logged in
     	if (context.sessionAttribute("currentUser") != null) {
@@ -108,9 +140,11 @@ public class UserController {
     		dateFormat.setLenient(false);
     		try {
     			dateFormat.parse(departureDate.trim());
-    			dateFormat.parse(returnDate.trim());
+    			if (returnDate != null) {
+    				dateFormat.parse(returnDate.trim());
+    			}
             } catch (ParseException pe) {
-                context.redirect("/api/airports");
+            	context.redirect("/api/airports");
             } catch (NullPointerException npe) {
             	context.redirect("/api/airports");
             }
@@ -128,7 +162,11 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to render the price results page
+     * If a user is logged in (sessionAttribute "currentUser" exists), render the price results page
+     * Else redirect the user to the login page
+     * */
     public static void priceResults(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
 			context.render("public/price_results.html");
@@ -137,7 +175,11 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to render the create order page
+     * If a user is logged in (sessionAttribute "currentUser" exists), render the create order page
+     * Else redirect the user to the login page
+     * */
     public static void paymentInfo(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
 			context.render("public/create_order.html");
@@ -146,7 +188,14 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to create a new reservation
+     * If a user is logged in (sessionAttribute "currentUser" exists), create the reservation
+     * Else redirect the user to the login page
+     * 
+     * Method gets the 'names-json' form parameter, and userId from currentUser, and the JSON cookie from the cookie named "flight"
+     * Calls the reservationService's static method to create the reservation, passes in the arguments
+     * */
     public static void createOrder(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
 			User user = context.sessionAttribute("currentUser");
@@ -161,7 +210,15 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to render JSON data for all reservations of a given user ID
+     * If a user is logged in (sessionAttribute "currentUser" exists), render the JSON data
+     * Else redirect the user to the login page
+     * 
+     * Get user ID from the "currentUser" session attribute
+     * Call the getAllReservations service method
+     * context.json the results
+     * */
     public static void getAllReservationsByUserId(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
 			User user = context.sessionAttribute("currentUser");
@@ -173,7 +230,15 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to render JSON data for the reservation by reservation ID
+     * If a user is logged in (sessionAttribute "currentUser" exists), render the JSON data
+     * Else redirect the user to the login page
+     * 
+     * Get reservation ID from the path parameter
+     * Call the getlReservation service method
+     * context.json the results
+     * */
     public static void getReservationById(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
 			User user = context.sessionAttribute("currentUser");
@@ -185,7 +250,11 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to render the seatmap display page
+     * If a user is logged in (sessionAttribute "currentUser" exists), render the seatmap display page
+     * Else redirect the user to the login page
+     * */
     public static void seatmapDisplay(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
 			context.render("public/seatmap_display.html");
@@ -194,7 +263,16 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to book seats on a reservation
+     * If a user is logged in (sessionAttribute "currentUser" exists), book the seats
+     * Else redirect the user to the login page
+     * 
+     * Get reservation id from the path parameter
+     * context.formParamMap() for retrieving all form parameters (this is dynamic so can't hardcode names)
+     * For each form parameter, call the bookSeat service method
+     * Redirect to the dashboard
+     * */
     public static void bookSeats(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
     		Integer reservationId = Integer.parseInt(context.pathParam("id"));
@@ -204,7 +282,9 @@ public class UserController {
     			String planeSeat = pair.getValue().get(0);
     			String carrierCode = key.split("-")[0];
     			Integer flightNumber = Integer.parseInt(key.split("-")[1]);
-    			travellersService.bookSeat(reservationId, planeSeat, "", "2011-01-01 00:00:00", carrierCode, flightNumber);
+    			String luggage = key.split("-")[3];
+    			String cabin = key.split("-")[4];
+    			travellersService.bookSeat(reservationId, planeSeat, luggage, cabin, "2011-01-01 00:00:00", carrierCode, flightNumber);
     		}
     		context.redirect("/api/dashboard");
 		} else {
@@ -212,7 +292,15 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Update seats on a previously booked reservation
+     * If a user is logged in (sessionAttribute "currentUser" exists), edit the seats
+     * Else redirect the user to the login page
+     * 
+     * context.formParamMap() for retrieving all form parameters (this is dynamic so can't hardcode names)
+     * For each form parameter, call the updateSeat service method
+     * Redirect to the dashboard
+     * */
     public static void updateSeats(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
     		Integer reservationId = Integer.parseInt(context.pathParam("id"));
@@ -229,7 +317,15 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to render JSON data for all booked seats for a given reservation ID
+     * If a user is logged in (sessionAttribute "currentUser" exists), render the JSON data
+     * Else redirect the user to the login page
+     * 
+     * Gets the reservation ID from the path parameter
+     * Calls the getAllSeats service method
+     * context.json the results
+     * */
     public static void getAllSeatsByReservationId(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
     		Integer reservationId = Integer.parseInt(context.pathParam("id"));
@@ -239,7 +335,15 @@ public class UserController {
     		context.redirect("/");
     	}
     }
-    
+    /**
+     * Method to delete a reservation by given reservation ID
+     * If a user is logged in (sessionAttribute "currentUser" exists), delete the reservation
+     * Else redirect the user to the login page
+     * 
+     * Get the reservation ID from the path parameter
+     * Calls the deleteReservation service method
+     * context.json the results
+     * */
     public static void deleteReservation(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
     		Integer reservationId = Integer.parseInt(context.pathParam("id"));
@@ -250,6 +354,11 @@ public class UserController {
     	}
     }
 
+    /**
+     * Method to log the user out
+     * If a user is logged in (sessionAttribute "currentUser" exists), set the currentUser session attribute to null
+     * Else redirect the user to the login page
+     * */
     public static void logOut(Context context){
         if (context.sessionAttribute("currentUser") != null) {
 			context.sessionAttribute("currentUser", null);

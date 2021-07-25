@@ -6,6 +6,10 @@ import dao.ReservationDao;
 import dao.ReservationDaoImpl;
 import models.Reservation;
 
+/**
+ * Implementation class for the ReservationService interface
+ * Each method simply calls the DAO's associated method and passes in the parameters
+ * */
 public class ReservationServiceImpl implements ReservationService {
 	ReservationDao reservationDao;
 	

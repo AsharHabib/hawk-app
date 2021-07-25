@@ -6,6 +6,10 @@ import models.User;
 
 import java.util.Map;
 
+/**
+ * Implementation class for the UserService interface
+ * Each method simply calls the DAO's associated method and passes in the parameters
+ * */
 public class UserServiceImpl implements UserService {
 	UserDao userDao;
 	

@@ -1,5 +1,12 @@
 package models;
 
+/**
+ * Model class for the travellers table
+ * Fields: int id, int reservationId, String planeSeat, String luggage, String cabin, String flightDuration, String carrierCode, int flightNumber
+ * Each field corresponds to a column in the reservations table
+ * 
+ * Class has a no-args constructor, a constructor to initialize each field, as well as getters and setters
+ * */
 public class Traveller {
 	private int id;
 	private int reservationId;
@@ -12,16 +19,16 @@ public class Traveller {
 	public Traveller() {
 		super();
 	}
-	public Traveller(int id, int reservationId, String planeSeat, String cabin, String flightDuration, String carrierCode, int flightNumber) {
+	public Traveller(int id, int reservationId, String planeSeat, String luggage, String cabin, String flightDuration, String carrierCode, int flightNumber) {
 		super();
 		this.id = id;
 		this.reservationId = reservationId;
 		this.planeSeat = planeSeat;
+		this.luggage = luggage;
 		this.cabin = cabin;
 		this.flightDuration = flightDuration;
 		this.carrierCode = carrierCode;
 		this.flightNumber = flightNumber;
-		this.luggage = "";
 	}
 	public String getCarrierCode() {
 		return carrierCode;

@@ -5,10 +5,12 @@ import dao.TravellersDao;
 import dao.TravellersDaoImpl;
 import models.Traveller;
 
+/**
+ * Implementation class for the TravellersService interface
+ * Each method simply calls the DAO's associated method and passes in the parameters
+ * */
 public class TravellersServiceImpl implements TravellersService {
 	TravellersDao travellersDao;
-	
-	
 
 	public TravellersServiceImpl() {
 		this.travellersDao = new TravellersDaoImpl();
@@ -20,8 +22,8 @@ public class TravellersServiceImpl implements TravellersService {
 	}
 
 	@Override
-	public void bookSeat(int reservationId, String planeSeat, String cabin, String flightDuration, String carrierCode, int flightNumber) {
-		this.travellersDao.bookSeat(reservationId, planeSeat, cabin, flightDuration, carrierCode, flightNumber);
+	public void bookSeat(int reservationId, String planeSeat, String luggage, String cabin, String flightDuration, String carrierCode, int flightNumber) {
+		this.travellersDao.bookSeat(reservationId, planeSeat, luggage, cabin, flightDuration, carrierCode, flightNumber);
 	}
 
 	@Override

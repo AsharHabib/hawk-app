@@ -12,11 +12,14 @@ import dbconfig.ConnectionUtil;
 import dbconfig.ResourceClosers;
 import models.User;
 
+/**
+ * Implementation class for the UserDao interface
+ * */
 public class UserDaoImpl implements UserDao{
 
-//	public UserDaoImpl() {
-//		
-//	}
+	public UserDaoImpl() {
+		
+	}
 	
 	public String getOne() {
 		// TODO Auto-generated method stub
@@ -44,7 +47,9 @@ public class UserDaoImpl implements UserDao{
 		System.out.println("LOL");
 		return "working";
 	}
-
+	/**
+	 * Method to get all users
+	 * */
 	@Override
 	public Map<Integer, User> getAllUsers() {
 		HashMap<Integer, User> users = new HashMap<>();
@@ -92,7 +97,9 @@ public class UserDaoImpl implements UserDao{
 		// Then return the Hash Map where we all stored the retrieved users
 		return users;
 	}
-
+	/**
+	 * Method to check the user
+	 * */
 	public Map<Integer, User> checkUser(User user){
 		System.out.println("Goes through the DAO IMPL");
 		// Create a Map that stores the retrieved user
@@ -132,7 +139,7 @@ public class UserDaoImpl implements UserDao{
 
 		return oneUser;
 	}
-
+	
 	public void createUser(User user){
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -192,7 +199,10 @@ public class UserDaoImpl implements UserDao{
 		}
 
 	}
-
+	/**
+	 * Method to verify the email and password that a user inputs
+	 * Throws IllegalArgumentException, if the email and password didn't match or even exist in the users table
+	 * */
 	@Override
 	public User userLogin(String email, String password) throws IllegalArgumentException {
 		User oneUser = null;

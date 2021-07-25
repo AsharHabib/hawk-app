@@ -22,6 +22,7 @@
 		<section id="map-section"></section>
 		
 		<script>
+			//Async function for retrieving reservation data from the reservations.json/:id route
 			async function getReservationData() {
 				// URL would be like http://localhost:5000/api/seatmap-display/5
 				var reservation_id = location.href.substring(42);
@@ -31,6 +32,7 @@
 				return json;
 			}
 			
+			//Async function for retrieving seats data from seats.json/:id route
 			async function getSeatsData() {
 				// URL would be like http://localhost:5000/api/seatmap-display/5
 				var reservation_id = location.href.substring(42);
@@ -40,20 +42,30 @@
 				return json;
 			}
 			
+			//Global scope variables
 			var original_passengers = null;
+			var luggage = "";
+			var cabin = "";
 			
+			//Async function to send a POST request to the Amadeus Seatmap Display API, calls all the other async functions for their return values
 			async function SeatmapDisplay() {
 				var request_access = await RequestAccessToken();
 				var reservation_data = await getReservationData();
 				var taken_seats = await getSeatsData();
 				
+				var names = await JSON.parse(reservation_data.namesJSON);
+				luggage = names.luggage;
+				cabin = names.cabin;
+				
 				var flight_search_offer = await JSON.parse(reservation_data.reservationJSON);
 				flight_search_offer.disablePricing = true;
 				flight_search_offer.paymentCardRequired = false;
+				//Set up the request body that will be sent with the POST request
 				var flight_seatmap_display = {
 					"data": [flight_search_offer]
 				};
 				
+				//Fetch from the Amadeus API with the request body
 				var url = "https://test.api.amadeus.com/v1/shopping/seatmaps";
 				var access_token = request_access.access_token;
 				var response = await fetch(url, {
@@ -65,7 +77,10 @@
 					body: JSON.stringify(flight_seatmap_display)
 				});
 				var json = await response.json();
+				
+				//Call the display function to actually display the interactive map
 				display(json, taken_seats);
+				//Set up the first flight to show up at first
 				document.getElementById("Flight-0").style.display = "block";
 				var available_seats = document.querySelectorAll(".flight-map .available");
 				var reserved_seats = document.querySelectorAll(".flight-map .reserved");
@@ -73,12 +88,16 @@
 				var inputs_edit = document.getElementsByClassName("edit-seat-input");
 				var form = document.getElementById("book-seats");
 				var form_edit = document.getElementById("edit-seats");
+				//Have the edit-form's inputs be filled out on-page load
 				if (reserved_seats.length == inputs_edit.length) {
 					for (let input_index = 0; input_index < inputs_edit.length; input_index++) {
+						console.log(reserved_seats)
+						console.log(reserved_seats[input_index])
+						console.log(reserved_seats[input_index].id)
 						inputs_edit[input_index].setAttribute("value", `${reserved_seats[input_index].id}`);
 					}
 				}
-				
+				//Only display the edit form if there are reserved seats, only display the brand new form if there aren't reserved seats
 				if (reserved_seats.length > 0) {
 					form.style.display = "none";
 					form_edit.style.display = "block";
@@ -86,8 +105,9 @@
 					form_edit.style.display = "none";
 					form.style.display = "block";
 				}
-
+				//For loop to set up each div's click event handler
 				for (let available_seat_index = 0; available_seat_index < available_seats.length; available_seat_index++) {
+					//Create a checked key (if the div is checked or not) and set it to false by default
 					available_seats[available_seat_index].checked = false;
 					var div_tab_id = available_seats[available_seat_index].parentElement.parentElement.id;
 					var passengers_remaining_h2 = document.querySelector(`#${div_tab_id} > h2`);
@@ -100,7 +120,9 @@
 						var num_available_seats = parseInt(available_seats_h2.innerText.substring(27));
 						const inputFields = document.querySelectorAll("input");
 						var all_seats_chosen = false;
+						//Toggle the checked value on click
 						available_seats[available_seat_index].checked = !available_seats[available_seat_index].checked;
+						//If the seat is now checked, set it's color to orange, and decrement the num_available_seats and passengers_remaining variables
 						if (available_seats[available_seat_index].checked) {
 							available_seats[available_seat_index].style.backgroundColor = "orange";
 							for (let reserved_seat_index = 0; reserved_seat_index < reserved_seats.length; reserved_seat_index++) {
@@ -115,6 +137,7 @@
 							passengers_remaining_h2.innerText = `Number of passengers to choose seats for: ${passengers_remaining}`;
 							available_seats_h2.innerText = `Available seats remaining: ${num_available_seats}`;
 						} else {
+							//If the seat is now unchecked, set it's color to green, increment the num_available_seats and passengers_remaining variables
 							available_seats[available_seat_index].style.backgroundColor = "green";
 							for (let reserved_seat_index = 0; reserved_seat_index < reserved_seats.length; reserved_seat_index++) {
 								reserved_seats[reserved_seat_index].style.backgroundColor = "blue";
@@ -128,6 +151,7 @@
 							passengers_remaining_h2.innerText = `Number of passengers to choose seats for: ${passengers_remaining}`;
 							available_seats_h2.innerText = `Available seats remaining: ${num_available_seats}`;
 						}
+						//Only have the book-seats-button show up if all it's inputs are filled
 						const validInputs = Array.from(inputFields).filter( input => input.value !== "");
 						var button = document.getElementById("book-seats-button")
 						if (inputFields.length === validInputs.length) {
@@ -139,7 +163,7 @@
 					});
 				}
 			}
-			
+			//Async function to get the access token needed for the Amadeus API
 			async function RequestAccessToken() {
 				var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
 				    method: 'POST',
@@ -152,7 +176,7 @@
 				var access_json = await request_access.json();
 				return access_json;
 			}
-			
+			//Function to display the interactive seat map
 			function display(json, taken_seats) {
 				var flights = json.data;
 				var map_section = document.getElementById("map-section");
@@ -177,8 +201,6 @@
 				button_edit.id = "edit-seats-button";
 				button_edit.innerText = "Edit seats!";
 				form_edit.appendChild(button_edit);
-				console.log(taken_seats);
-				
 				for (let flight_index in flights) {
 					var tab = document.createElement("a");
 					var flight = flights[flight_index];
@@ -205,7 +227,7 @@
 					for (var j = 0; j < passengers_remaining; j++) {
 						var input = document.createElement("input");
 						input.setAttribute("type", "text");
-						input.setAttribute("name", `${flight.carrierCode}-${flight.number}-${j}`);
+						input.setAttribute("name", `${flight.carrierCode}-${flight.number}-${j}-${luggage}-${cabin}`);
 						input.id = `Flight-${flight_index}_${j}`;
 						input.className = "book-seat-input";
 						form.appendChild(input);

@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 	<body>
-		<h1 id="ok">something</h1>
+		<h1 id="ok">Search Parameters</h1>
 		<form id="form" method="GET" action="/api/search-results">
 			<ol id="ol-current"></ol>
 			<ol id="ol-destination"></ol>
@@ -29,11 +29,11 @@
 			<input type="radio" id="connected" name="nonStop" value="false" />
 			<label for="maxPrice">Max Price</label>
 			<input type="number" id="maxPrice" name="maxPrice" min="1" />
-			<button type="submit" id="button">button</button>
+			<button type="submit" id="button">Search for flights!</button>
 		</form>
 		<script>
+			//Get the specific URL query parameters
 			var urlParams = new URLSearchParams(window.location.search);
-
 			var departureCity = urlParams.get('departureCity');
 			var departureState = urlParams.get('departureState');
 			var radius = urlParams.get('radius');
@@ -41,6 +41,7 @@
 			var arrivalState = urlParams.get('arrivalState');
 			var destinationRadius = urlParams.get('destination-radius');
 			
+			//Async function for Google's Geocoding API, to convert City, State to Latitude + Longitude
 			async function latLongGoogleAPI(city, state) {
 				var url = `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+${state}&key=` + "AIzaSyD7MGumrOiKucDKRyuT_KJe1YsbZrMMcdw";
 				var response = await fetch(url);
@@ -54,12 +55,12 @@
 			var button = document.getElementById("button");
 			
 			var airports = null;
+			//Async function to fetch from the Amadeus Airports Nearest Relevant API, calls both other async functions, current Boolean value to distinguish between departure and arrival
 			async function AirportsNearest(city_query, state_query, radius, current=true) {
 				var request_access = await RequestAccessToken();
 				var latLong = await latLongGoogleAPI(city_query, state_query);
 				var latitude = latLong.results[0].geometry.location.lat;
 				var longitude = latLong.results[0].geometry.location.lng;
-				console.log(latitude + " " + longitude);
 				
 				var url = "https://test.api.amadeus.com/v1/reference-data/locations/airports?latitude=" + latitude + "&longitude=" + longitude + "&radius=" + radius;
 				var access_token = request_access.access_token;
@@ -71,7 +72,7 @@
 				});
 				var json = await response.json();
 				airports = json.data;
-				console.log(airports);
+				//If this is the departure's local airports, have them appear under the Departure part, with radio buttons as inputs
 				if (current) {
 					for (let index in airports) {
 						var li = document.createElement("li");
@@ -87,9 +88,9 @@
 						li.appendChild(label);
 						li.appendChild(radio);
 						ol_current.appendChild(li);
-						console.log('ok');
 					}
 				} else {
+				//Else, display them for the arrival airports
 					for (let index in airports) {
 						var li = document.createElement("li");
 						var radio = document.createElement("input");
@@ -107,7 +108,7 @@
 					}
 				}
 			}
-			
+			//Async function to get the access token needed for the Amadeus API
 			async function RequestAccessToken() {
 				var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
 				    method: 'POST',
@@ -131,7 +132,7 @@
 			    if(mm<10){
 			        mm='0'+mm
 			    } 
-
+			//Verify that the date inputs are only after the current day, and returnDate is after the departureDate
 			today = yyyy+'-'+mm+'-'+dd;
 			document.getElementById("departureDate").setAttribute("min", today);
 			document.getElementById("returnDate").setAttribute("min", today);
@@ -140,7 +141,6 @@
 			});
 			
 			window.onload = function () {
-				
 				AirportsNearest(departureCity, departureState, radius);
 				AirportsNearest(arrivalCity, arrivalState, destinationRadius, false);
 			}

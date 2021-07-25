@@ -1,5 +1,12 @@
 package models;
 
+/**
+ * Model class for the reservations table
+ * Fields: int id, int userId, String reservationJSON, String namesJSON
+ * Each field corresponds to a column in the reservations table
+ * 
+ * Class has a constructor to initialize each field, as well as getters and setters
+ * */
 public class Reservation {
 	private int id;
 	private int userId;

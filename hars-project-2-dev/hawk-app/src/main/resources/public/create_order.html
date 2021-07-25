@@ -12,18 +12,28 @@
 			<input type="text" />
 			<input type="number" />
 			<input type="password" />
-			<input type="hidden" name="names-json" id="names-json" />
+			<label for="S">Small:</label>
+			<input type="radio" name="luggage" value="S" id="S" checked />
+			<label for="M">Medium:</label>
+			<input type="radio" name="luggage" value="M" id="M" />
+			<label for="L">Large:</label>
+			<input type="radio" name="luggage" value="L" id="L" />
+			<label for="XL">Extra Large:</label>
+			<input type="radio" name="luggage" value="XL" id="XL" />
+			<input type="hidden" name="names-json" id="names-json" /> 
 		</form>
 		
 		<script>
 			var form = document.getElementById("form");
 			var button = document.getElementById("button");
+			//Get the cookie value and parse it into JSON
 			var cookieValue = document.cookie
 							  .split('=')[1];
 			var flight_search_offer = JSON.parse(cookieValue);
 			flight_search_offer.disablePricing = true;
 			flight_search_offer.paymentCardRequired = false;
 			
+			//Dynamically create the inputs for Passenger names
 			function inputPassengerNames() {
 				var form = document.getElementById("form");
 				var button = document.createElement("button");
@@ -53,6 +63,7 @@
 				inputPassengerNames();
 			}
 			
+			//On form submit, set the hidden input's value to contain a JSON for the names, luggage, and cabin information
 			form.onsubmit = function () {
 				var kvpairs = [];
                 for ( var i = 0; i < form.elements.length; i++ ) {
@@ -62,7 +73,9 @@
 		           	}
 		       	}
 		       	var names = {
-					"passengers": []
+					"passengers": [],
+					"luggage": "",
+					"cabin":""
 				};
 				for (var i = 0; i < parseInt(kvpairs.length/2); i++) {
 					var bothNames = {
@@ -71,6 +84,10 @@
 					};
 					names.passengers.push(bothNames);
 				}
+				var value = document.querySelector('input[name="luggage"]:checked').value;
+				names.luggage = value;
+				var cabin = flight_search_offer.travelerPricings[0].fareDetailsBySegment[0].cabin;
+				names.cabin = cabin;
 				document.getElementById("names-json").setAttribute("value", JSON.stringify(names));
 				document.cookie = "flight=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/ SameSite=None; Secure;";
 			}

@@ -3,7 +3,9 @@ package frontcontroller;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-
+/**
+ * FrontController class to perform middleware and define a dispatcher
+ * */
 public class FrontController {
 	Javalin app;
 	Dispatcher dispatcher;

@@ -12,6 +12,9 @@ import controllers.UserController;
 import io.javalin.Javalin;
 import io.javalin.core.security.Role;
 
+/**
+ * Dispatcher class to handle endpoints and call the respective controller method
+ * */
 public class Dispatcher {
 	
 	public Dispatcher(Javalin app) {
@@ -118,6 +121,7 @@ public class Dispatcher {
 				});
 			});
 		});
+		//Booking seats for the first time
 		app.routes(() -> {
 			path("/api/book-seats", () -> {
 				path(":id", () -> {
@@ -125,6 +129,7 @@ public class Dispatcher {
 				});
 			});
 		});
+		//JSON route to retrieve all the booked seats for a reservation ID
 		app.routes(()->{
 			path("/api/seats.json", ()-> {
 				path(":id", ()-> {
@@ -132,6 +137,7 @@ public class Dispatcher {
 				});
 			});
 		});
+		//Editing seats after having booked them
 		app.routes(()-> {
 			path("/api/edit-seats", ()-> {
 				path(":id", ()-> {
@@ -139,6 +145,7 @@ public class Dispatcher {
 				});
 			});
 		});
+		//Deleting a reservation
 		app.routes(()-> {
 			path("/api/reservations", ()-> {
 				path(":id", ()-> {

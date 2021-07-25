@@ -10,9 +10,14 @@ import java.util.List;
 import dbconfig.ConnectionUtil;
 import dbconfig.ResourceClosers;
 import models.Reservation;
-
+/**
+ * Implementation class for the ReservationDao interface
+ * */
 public class ReservationDaoImpl implements ReservationDao {
 
+	/**
+	 * Method to get all reservations with given user ID
+	 * */
 	@Override
 	public List<Reservation> getAllReservations(int userId) {
 		List<Reservation> reservations = new ArrayList<>();
@@ -46,7 +51,9 @@ public class ReservationDaoImpl implements ReservationDao {
 		}
 		return reservations;
 	}
-
+	/**
+	 * Method to get a specific reservation by reservation ID
+	 * */
 	@Override
 	public Reservation getReservation(int reservationId) {
 		Reservation reservation = new Reservation();
@@ -84,7 +91,9 @@ public class ReservationDaoImpl implements ReservationDao {
 		}
 		return reservation;
 	}
-
+	/**
+	 * Method to create a reservation for a given userId, with two JSON string params: json and names
+	 * */
 	@Override
 	public void createReservation(int userId, String json, String names) {
 		Connection conn = null;
@@ -100,7 +109,7 @@ public class ReservationDaoImpl implements ReservationDao {
 			stmt.setInt(1, userId);
 			stmt.setString(2, json);
 			stmt.setString(3, names);
-			
+			System.out.println(names);
 			//And of course, execute the SQL statement once you have set your parameters.
 			stmt.execute();
 		} catch(SQLException e) {
@@ -110,7 +119,9 @@ public class ReservationDaoImpl implements ReservationDao {
 			ResourceClosers.closeStatement(stmt);
 		}
 	}
-
+	/**
+	 * Updates a seat for a given travellerId, with a String parameter planeSeat to specify the new seat
+	 * */
 	@Override
 	public void deleteReservation(int reservationId) {
 		Connection conn = null;

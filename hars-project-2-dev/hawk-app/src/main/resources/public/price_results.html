@@ -12,13 +12,11 @@
 			var body = document.getElementById("ok");
 			var form = document.getElementById("form");
 			var button = document.getElementById("button");
-			console.log(document.cookie);
 			var cookieValue = document.cookie
 							  .split('; ')
 							  .find(row => row.startsWith('flight='))
 							  .split('=')[1];
 			var flight_search_offer = JSON.parse(cookieValue);
-			console.log(flight_search_offer);
 			flight_search_offer.disablePricing = true;
 			flight_search_offer.paymentCardRequired = false;
 			var flight_price_offer = {
