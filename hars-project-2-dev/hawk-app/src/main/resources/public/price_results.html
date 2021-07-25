@@ -42,8 +42,11 @@
 	        <div id="formRow" class="row">
 	        	       <div id="formNav">
 	                    <ul class="nav nav-pills nav-fill">
+		                    <li class="nav-item">
+	                            <a class="nav-link disabled" aria-current="page" href="#">Destinations</a>
+	                        </li>
 	                        <li class="nav-item">
-	                            <a class="nav-link disabled" aria-current="page" href="#">Search</a>
+	                            <a class="nav-link disabled" aria-current="page" href="#">Search Flights</a>
 	                        </li>
 	                        <li class="nav-item">
 	                            <a class="nav-link disabled" href="#" >Results</a>
@@ -61,7 +64,8 @@
 	                <!-- Review Card -->
 					<div class="card text-center">
 					  <div class="card-body">
-					  <form id="form" method="POST">
+					  <form id="form" method="POST" action="/api/create-order">
+						<span id="passengers"></span>
 					  	<h4 id="checkout">Checkout</h4>
 					  	<div class="input-group input-group-lg row">
 							<div class="col-md">
@@ -104,3 +108,4 @@
 		<script src="./scripts/priceResults.js"></script>
 	</body>
 </html>
+

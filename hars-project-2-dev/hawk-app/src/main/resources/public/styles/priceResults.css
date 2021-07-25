@@ -1,4 +1,4 @@
-l#airplane {
+#airplane {
   width: 50em;
   height: 43em;
   position: fixed;
@@ -152,3 +152,12 @@ hr {
 .resultCards {
 	margin-bottom: 2em;
 }
+
+.col-5, .col-7 {
+	margin-top: 2em;
+}
+
+.border-primary {
+	max-width: 18rem;
+}
+

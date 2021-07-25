@@ -128,3 +128,7 @@ hr {
     position: sticky;
 	bottom: 0;
 }
+
+.col-5, .col-7 {
+	margin-top: 2em;
+}
