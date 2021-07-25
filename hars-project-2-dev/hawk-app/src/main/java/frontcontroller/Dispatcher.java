@@ -41,7 +41,7 @@ public class Dispatcher {
 		});
 		// The login functionality
 		app.routes(()->{
-			path("/login", ()->{
+			path("/api/login", ()->{
 				post(UserController::userLogIn);
 			});
 		});
@@ -72,7 +72,7 @@ public class Dispatcher {
 		});
 		// Dashboard- Current bookings		
 		app.routes(()->{
-			path("/dashboard", ()-> {
+			path("/api/dashboard", ()-> {
 				get(UserController::userDashboard);
 			});
 		});
