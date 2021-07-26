@@ -449,6 +449,7 @@
 								}
 								timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
 								timeValue += (hours >= 12) ? " P.M." : " A.M."; 
+								date = format(date);
 								let newTime = date + " at " + timeValue;	
 								return newTime;
 							}
@@ -663,9 +664,13 @@
 			}
 			
 			
-			
-			
-			
+			function format(inputDate) {
+			    var date = new Date(inputDate);
+			    if (!isNaN(date.getTime())) {
+			        // Months use 0 index.
+			        return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
+			    }
+			}
 			
 			async function RequestAccessToken() {
 				var request_access = await fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
