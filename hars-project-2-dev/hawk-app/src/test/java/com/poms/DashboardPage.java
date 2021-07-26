@@ -11,10 +11,15 @@ public class DashboardPage {
 	public WebElement seatmapLink;
 	@FindBy(css = "li.nav-item:nth-child(3) > a:nth-child(1)")
 	public WebElement logOutLink;
+<<<<<<< HEAD
 	@FindBy(css="li.number:nth-child(2) > form:nth-child(3) > button:nth-child(2)")
 	public WebElement deleteButton;
 	@FindBy(css="li.nav-item:nth-child(2) > a:nth-child(1)")
 	public WebElement bookTripLink;
+=======
+	@FindBy(css=".delete_btn")
+	public WebElement deleteButton;
+>>>>>>> 9ba6afbec38e2e0cbde5bd209ab7050142c83b70
 	
 	public DashboardPage(WebDriver driver) {
 		PageFactory.initElements(driver, this);
@@ -25,10 +30,13 @@ public class DashboardPage {
 	}
 	public void clickLogOut(){this.logOutLink.click();}
 	
+<<<<<<< HEAD
 	public void clickBookTripLink() {
 		this.bookTripLink.click();
 	}
 	
+=======
+>>>>>>> 9ba6afbec38e2e0cbde5bd209ab7050142c83b70
 	public void clickDeleteButton() {
 		this.deleteButton.click();
 	}
