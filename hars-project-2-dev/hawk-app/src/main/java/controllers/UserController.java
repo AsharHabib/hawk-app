@@ -1,5 +1,6 @@
 package controllers;
 
+import java.lang.System.Logger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,6 +12,7 @@ import java.util.Map;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
+import org.apache.logging.log4j.*;
 
 import io.javalin.http.Context;
 import models.Reservation;
@@ -31,6 +33,8 @@ public class UserController {
     static UserService userService = new UserServiceImpl();
     static ReservationService reservationService = new ReservationServiceImpl();
     static TravellersService travellersService = new TravellersServiceImpl();
+    
+    private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(UserController.class);
 
     public static void getAllUsers(Context context){
         context.json(userService.getAllUsers());
@@ -57,8 +61,10 @@ public class UserController {
 			User user = userService.userLogIn(context.formParam("email"), context.formParam("password"));
 			context.sessionAttribute("currentUser", user);
 			context.json(user);
+			LOGGER.info("Logged in as " + user.getFirstName() + " " +user.getLastName());
 			context.redirect("/api/dashboard");
 		} catch (IllegalArgumentException e) {
+			LOGGER.error("User entered false credentials");
 			context.redirect("/");
 		}
     }
@@ -68,6 +74,7 @@ public class UserController {
                 context.formParam("email"),
                 context.formParam("password"));
         context.render("public/index.html");
+        LOGGER.info("New user made");
     }
     /**
      * Method to render the default page
@@ -78,6 +85,7 @@ public class UserController {
         if (context.sessionAttribute("currentUser") == null) {
 			context.render("public/login.html");
 		} else {
+			LOGGER.error("Already logged in");
 			context.redirect("/api/dashboard");
 		}
     }
@@ -88,8 +96,10 @@ public class UserController {
      * */
     public static void userDashboard(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
+    		LOGGER.info("Dashboard page loaded");
     		context.render("public/dashboard.html");
     	} else {
+    		LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -100,10 +110,12 @@ public class UserController {
      * */
     public static void airportsNearest(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
+    		LOGGER.info("Airports Nearest page loaded");
     		User user = context.sessionAttribute("currentUser");
     		context.render("public/index.html");
     	} else {
     		//Redirect to login if the user isn't logged in
+    		LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -114,9 +126,11 @@ public class UserController {
      * */
     public static void airportResults(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
+    		LOGGER.info("Airport Results page loaded");
     		context.render("public/airport_results.html");
     	} else {
     		//Redirect to login if the user isn't logged in
+    		LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -144,21 +158,26 @@ public class UserController {
     				dateFormat.parse(returnDate.trim());
     			}
             } catch (ParseException pe) {
+            	LOGGER.warn("Invalid date format");
             	context.redirect("/api/airports");
             } catch (NullPointerException npe) {
+            	LOGGER.warn("Invalid date format");
             	context.redirect("/api/airports");
             }
     		try {
 				if (Integer.valueOf(adults) < 1 || Integer.valueOf(maxPrice) < 1) {
+					LOGGER.warn("Integer parameters must be greater than 0");
 					context.redirect("/api/airports");
 				}
 			} catch (NumberFormatException e) {
+				LOGGER.warn("Integer parameters must be integers");
 				context.redirect("/api/airports");
 			}
-    		
+    		LOGGER.info("Airport Results page loaded");
 			context.render("public/search_results.html");
 		} else {
     		//Redirect to login if the user isn't logged in
+			LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -169,9 +188,11 @@ public class UserController {
      * */
     public static void priceResults(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
+    		LOGGER.info("Price Results page loaded");
 			context.render("public/price_results.html");
 		} else {
     		//Redirect to login if the user isn't logged in
+			LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -182,9 +203,11 @@ public class UserController {
      * */
     public static void paymentInfo(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
+    		LOGGER.info("Payment info page loaded");
 			context.render("public/create_order.html");
 		} else {
     		//Redirect to login if the user isn't logged in
+			LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -204,9 +227,11 @@ public class UserController {
 			String jsonCookie = context.cookie("flight");
 			context.removeCookie("flight");
 			reservationService.createReservation(userId, jsonCookie, names);
+			LOGGER.info("New order created");
 			context.redirect("/");
 		} else {
     		//Redirect to login if the user isn't logged in
+			LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -224,9 +249,11 @@ public class UserController {
 			User user = context.sessionAttribute("currentUser");
 			int userId = user.getId();
 			List<Reservation> reservations = reservationService.getAllReservations(userId);
+			LOGGER.info("All reservations retrieved for User #" + userId);
 			context.json(reservations);
 		} else {
     		//Redirect to login if the user isn't logged in
+			LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -244,9 +271,11 @@ public class UserController {
 			User user = context.sessionAttribute("currentUser");
 			Integer reservationId = Integer.parseInt(context.pathParam("id"));
 			Reservation reservation = reservationService.getReservation(reservationId);
+			LOGGER.info("Reservation #" + reservationId + " retrieved");
 			context.json(reservation);
 		} else {
     		//Redirect to login if the user isn't logged in
+			LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -257,9 +286,11 @@ public class UserController {
      * */
     public static void seatmapDisplay(Context context) {
     	if (context.sessionAttribute("currentUser") != null) {
+    		LOGGER.info("Seatmap displayed");
 			context.render("public/seatmap_display.html");
 		} else {
     		//Redirect to login if the user isn't logged in
+			LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -286,9 +317,11 @@ public class UserController {
     			String cabin = key.split("-")[4];
     			travellersService.bookSeat(reservationId, planeSeat, luggage, cabin, "2011-01-01 00:00:00", carrierCode, flightNumber);
     		}
+    		LOGGER.info("All selected seats booked.");
     		context.redirect("/api/dashboard");
 		} else {
     		//Redirect to login if the user isn't logged in
+			LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -311,9 +344,11 @@ public class UserController {
     			Integer travellerId = Integer.parseInt(key.split("-")[3]);
     			travellersService.updateSeat(travellerId, planeSeat);
     		}
+    		LOGGER.info("All selected seats edited.");
     		context.redirect("/api/dashboard");
 		} else {
     		//Redirect to login if the user isn't logged in
+			LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -330,8 +365,10 @@ public class UserController {
     	if (context.sessionAttribute("currentUser") != null) {
     		Integer reservationId = Integer.parseInt(context.pathParam("id"));
     		List<Traveller> seats = travellersService.getAllSeats(reservationId);
+    		LOGGER.info("All seats seats retrieved for Reservation #" + reservationId);
     		context.json(seats);
     	} else {
+    		LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -348,8 +385,10 @@ public class UserController {
     	if (context.sessionAttribute("currentUser") != null) {
     		Integer reservationId = Integer.parseInt(context.pathParam("id"));
     		reservationService.deleteReservation(reservationId);
+    		LOGGER.info("Reservation #" + reservationId + " deleted");
     		context.redirect("/api/dashboard");
     	} else {
+    		LOGGER.error("User isn't logged in.");
     		context.redirect("/");
     	}
     }
@@ -362,9 +401,11 @@ public class UserController {
     public static void logOut(Context context){
         if (context.sessionAttribute("currentUser") != null) {
 			context.sessionAttribute("currentUser", null);
+			LOGGER.info("User has logged out.");
 			context.redirect("/");
 		} else {
 			//Redirect to login if the user isn't logged in
+			LOGGER.error("User isn't logged in.");
     		context.redirect("/");
 		}
     }

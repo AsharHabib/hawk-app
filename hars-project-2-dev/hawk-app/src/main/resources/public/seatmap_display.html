@@ -16,9 +16,53 @@
 			.flight-map {
 				display: none;
 			}
+			img{
+				height: 40px;
+			}
+			
+			li.nav-item{
+			    padding: 0 1em;
+			    font-size: large;
+			}
+			
+			li.logout{
+			    position: absolute;
+			    right: 0;
+			}
+			
+			.hidden{
+			    display: none;
+			}
+			
+			footer{
+			    position: absolute;
+			    bottom: 0;
+			    left: 1em;
+			}
 		</style>
 	</head>
 	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #044ea0;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><img id="imgLogo" alt="hars_logo"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/api/dashboard">Current Bookings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/api/airports">Book New Trip</a>
+                        </li>
+                        <li class="nav-item logout">
+                            <a class="nav-link active" aria-current="page" href="/api/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 		<section id="map-section"></section>
 		
 		<script>
