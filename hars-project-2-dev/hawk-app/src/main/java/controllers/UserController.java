@@ -362,7 +362,7 @@ public class UserController {
     public static void logOut(Context context){
         if (context.sessionAttribute("currentUser") != null) {
 			context.sessionAttribute("currentUser", null);
-			context.result("You logged out, Thank you for using HARS");
+			context.redirect("/");
 		} else {
 			//Redirect to login if the user isn't logged in
     		context.redirect("/");
