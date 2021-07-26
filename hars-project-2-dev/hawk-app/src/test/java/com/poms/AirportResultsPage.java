@@ -33,9 +33,9 @@ public class AirportResultsPage {
 	@FindBy(id = "connected")
 	public WebElement connectedRadio;
 	
-	Select dropdown = new Select(this.fromSelect);
-	Select dropdown2 = new Select(this.toSelect);
-	Select dropdown3 = new Select(this.travelClassSelect);
+//	Select dropdown = new Select(this.fromSelect);
+//	Select dropdown2 = new Select(this.toSelect);
+//	Select dropdown3 = new Select(this.travelClassSelect);
 	
 	public AirportResultsPage(WebDriver driver) {
 		PageFactory.initElements(driver, this);
@@ -50,11 +50,13 @@ public class AirportResultsPage {
 	};
 	
 	public void selectDepartAirport() {
-		this.dropdown.getOptions().get(1).click();
+		//this.dropdown.getOptions().get(1).click();
+		this.fromSelect.sendKeys("i");
 	};
 	
 	public void selectLandingAirport() {
-		this.dropdown2.getOptions().get(1).click();
+		//this.dropdown2.getOptions().get(1).click();
+		this.toSelect.sendKeys("l");
 	};
 	
 	public void selectDepartureDate(String departDate) {
@@ -70,7 +72,8 @@ public class AirportResultsPage {
 	};
 	
 	public void selectTravelClass() {
-		this.dropdown3.getOptions().get(1).click();
+		//this.dropdown3.getOptions().get(1).click();
+		this.travelClassSelect.sendKeys("e");
 	};
 	
 	public void clickNonStop() {

@@ -11,6 +11,8 @@ public class SearchResultsPage {
 	
 	@FindBy(id = "0")
 	public WebElement firstRadio; 
+//	@FindBy(css="div.card:nth-child(1) > div:nth-child(1) > h4:nth-child(1) > input:nth-child(1)")
+//	public WebElement firstRadio;
 	@FindBy(id = "button")
 	public WebElement nextBtn;
 	

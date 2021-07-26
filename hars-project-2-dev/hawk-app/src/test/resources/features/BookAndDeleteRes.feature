@@ -1,7 +1,7 @@
 Feature: Book and Delete a Reservation
 
 Background:
-  Given a user has logged in
+  Given a user has logged inn
 
 Scenario: A user searches for airports to fly from and to
   When a user clicks on the Book New Trip link
@@ -48,7 +48,7 @@ Scenario: A user confirms the reservation
   And selects their luggage
   And enters the passengers' names
   And clicks the button
-  Then the user is redirected to the dashboard page
+  Then the user is redirectedd to the dashboard page
   And the new flight is booked
 
 Scenario: A user deletes a reservation
