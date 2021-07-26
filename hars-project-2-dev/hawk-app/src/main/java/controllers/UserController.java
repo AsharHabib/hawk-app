@@ -1,6 +1,5 @@
 package controllers;
 
-import java.lang.System.Logger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

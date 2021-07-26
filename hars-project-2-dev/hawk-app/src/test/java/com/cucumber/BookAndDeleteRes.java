@@ -223,11 +223,8 @@ public class BookAndDeleteRes {
 	
 	@Given("a user is on the dashboard page")
 	public void a_user_is_on_the_dashboard_page() {
-<<<<<<< HEAD
 		assert driver.getCurrentUrl().equals("http://localhost:5000/api/dashboard");
-=======
 		assert driver.getCurrentUrl().equals("http://localhost:5001/api/dashboard");
->>>>>>> 9ba6afbec38e2e0cbde5bd209ab7050142c83b70
 	};
 	
 	@When("the user clicks the delete button for a certain reservation")
@@ -238,11 +235,8 @@ public class BookAndDeleteRes {
 	
 	@Then("the user is redirected back to the dashboard page")
 	public void user_redirected_back_to_the_dashboard() {
-<<<<<<< HEAD
 		assert driver.getCurrentUrl().equals("http://localhost:5000/api/dashbord");
-=======
 		assert driver.getCurrentUrl().equals("http://localhost:5001/api/dashbord");
->>>>>>> 9ba6afbec38e2e0cbde5bd209ab7050142c83b70
 	};
 	
 	@Then("the reservation is deleted")
