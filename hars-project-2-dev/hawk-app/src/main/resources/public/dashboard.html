@@ -29,10 +29,30 @@
 			    bottom: 0;
 			    left: 1em;
 			}
+			
+			body {
+			  background: #FFF;
+			}
+			
+			.page{ display: none;}
+			
+			#loading {
+			  display: flex;
+			  position: fixed;
+			  z-index: 100;
+			  width: 100%;
+			  height: 100%;
+			  background-image: url("https://i.pinimg.com/originals/61/d8/6d/61d86d2fc6bfffff058135dfdf5711ba.gif");
+			  background-size: cover;
+			  background-repeat: no-repeat;
+			  background-position: center;
+			}
 
 		</style>
 	</head>
 	<body>
+		<div id="loading"></div>
+		<div class="page">
 		<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #044ea0;">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#"><img id="imgLogo" alt="hars_logo"></a>
@@ -272,10 +292,28 @@
 			    })
 			}
 			
+		  	
+				const wait = (delay = 0) =>
+					new Promise(resolve => setTimeout(resolve, delay));
+			
+				const setVisible = (elementOrSelector, visible) => 
+			  		(typeof elementOrSelector === 'string'
+			    	? document.querySelector(elementOrSelector)
+			    	: elementOrSelector
+			  		).style.display = visible ? 'block' : 'none';
+			
+				setVisible('.page', false);
+				setVisible('#loading', true);
+			
+				document.addEventListener('DOMContentLoaded', () =>
+			  		wait(1000).then(() => {
+			    		setVisible('.page', true);
+			    		setVisible('#loading', false);
+			  	}));
 			window.onload = function() {
 			    reservations();
 			}
-		
 		</script>
+		</div>
 	</body>
 </html>

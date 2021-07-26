@@ -11,6 +11,8 @@ public class DashboardPage {
 	public WebElement seatmapLink;
 	@FindBy(css = "li.nav-item:nth-child(3) > a:nth-child(1)")
 	public WebElement logOutLink;
+	@FindBy(css=".delete_btn")
+	public WebElement deleteButton;
 	
 	public DashboardPage(WebDriver driver) {
 		PageFactory.initElements(driver, this);
@@ -20,4 +22,8 @@ public class DashboardPage {
 		this.seatmapLink.click();
 	}
 	public void clickLogOut(){this.logOutLink.click();}
+	
+	public void clickDeleteButton() {
+		this.deleteButton.click();
+	}
 }

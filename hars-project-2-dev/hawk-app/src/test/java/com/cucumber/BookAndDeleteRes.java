@@ -1,5 +1,7 @@
 package com.cucumber;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import java.time.Duration;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +17,7 @@ import com.poms.AirportResultsPage;
 import com.poms.CheckoutPage;
 import com.poms.DestinationsPage;
 import com.poms.SearchResultsPage;
+import com.poms.DashboardPage;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -39,7 +42,7 @@ public class BookAndDeleteRes {
 		driver.get("http://localhost:5000/api/dashboard");
 	};
 	
-	@Given("a user has logged in")
+	@Given("a user has logged inn")
 	public void a_user_has_logged_in() {
 		assert driver.getCurrentUrl().equals("http://localhost:5000/api/dashboard");
 	};
@@ -194,13 +197,34 @@ public class BookAndDeleteRes {
 		cp.clickConfirm();
 	};
 	
-	@Then("the user is redirected to the dashboard page")
+	@Then("the user is redirectedd to the dashboard page")
 	public void user_redirected_to_dashboard() {
 		assert driver.getCurrentUrl().equals("http://localhost:5001/api/dashbord");
 	};
 	
 	@Then("the new flight is booked")
 	public void user_flight_booked() {
+		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+	};
+	
+	@Given("a user is on the dashboard page")
+	public void a_user_is_on_the_dashboard_page() {
+		assert driver.getCurrentUrl().equals("http://localhost:5001/api/dashboard");
+	};
+	
+	@When("the user clicks the delete button for a certain reservation")
+	public void the_user_clicks_the_delete_button_for_a_certain_reservation() {
+		DashboardPage dp = new DashboardPage(driver);
+		dp.clickDeleteButton();
+	};
+	
+	@Then("the user is redirected back to the dashboard page")
+	public void user_redirected_back_to_the_dashboard() {
+		assert driver.getCurrentUrl().equals("http://localhost:5001/api/dashbord");
+	};
+	
+	@Then("the reservation is deleted")
+	public void the_reservation_is_deleted() {
 		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 	};
 	
